@@ -147,4 +147,3 @@ class PaisDao:
             con.close()
 
         return False        
-    
