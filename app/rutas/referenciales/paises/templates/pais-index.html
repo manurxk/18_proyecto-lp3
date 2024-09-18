@@ -1,17 +1,17 @@
 {% extends 'base.html' %}
     
 {% block titulo %}
-Ciudades
+Paises
 {% endblock %}
 
 {% block contenido %}
 <div class="container mt-4">
-    <h3>Listar Ciudades</h3>
+    <h3>Listar Paises</h3>
 
     <!-- tarjeta -->
     <div class="card">
       <div class="card-header">
-        <button type="button" class="btn btn-primary" id="btnAgregar">Agregar</button>
+        <button type="button" class="btn btn-outline-success" id="btnAgregar">Agregar</button>
       </div>
       <div class="card-body">
         <table class="table table-striped" id="tbl">
@@ -42,16 +42,16 @@ Ciudades
           <!-- Modal body -->
           <div class="modal-body">
             <div class="form-group">
-              <input type="hidden" id="txtIdCiudad">
+              <input type="hidden" id="txtIdPais">
               <label for="txtDescripcion">Descripción:</label>
-              <input type="text" class="form-control" placeholder="Ingrese alguna ciudad" id="txtDescripcion">
+              <input type="text" class="form-control" placeholder="Ingrese algun pais" id="txtDescripcion">
             </div>
           </div>
 
           <!-- Modal footer -->
           <div class="modal-footer">
-            <button type="button" class="btn btn-primary" id="btnGuardar">Guardar</button>
-            <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+            <button type="button" class="btn btn-success" id="btnGuardar">Guardar</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
           </div>
 
         </div>
@@ -77,12 +77,12 @@ Ciudades
       language: {
         url: "{{ url_for('static', filename='vendor/datatables/es-ES.json') }}",
       },
-      ajax:'/api/v1/ciudades',
+      ajax:'/api/v1/paises',
       columns: [
         { data: 'descripcion' },
         { data: function(row) {
-            return `<button type="button" name="btn_editar" class="btn btn-primary" data-id="${row.id}">Editar</button>
-                    <button type="button" name="btn_eliminar" class="btn btn-danger" data-id="${row.id}">Eliminar</button>`
+            return `<button type="button" name="btn_editar" class="btn btn-success" data-id="${row.id}">Editar</button>
+                    <button type="button" name="btn_eliminar" class="btn btn-primary" data-id="${row.id}">Eliminar</button>`
           }
         }
       ]
@@ -92,9 +92,9 @@ Ciudades
   const agregar = () => {
     $('#btnAgregar').on('click', function(){
       // Setear un título a modal
-      $('#modalTitle').text("Agregar una Ciudad");
+      $('#modalTitle').text("Agregar un Pais");
       // inicia ventana modal
-      $('#txtIdCiudad').val("");
+      $('#txtIdPais').val("");
       $('#txtDescripcion').val("");
       $('#modalFormulario').modal();
     });
@@ -102,13 +102,13 @@ Ciudades
 
   const guardar = () => {
     $('#btnGuardar').on('click', function() {
-      const idCiudad = $('#txtIdCiudad').val();
+      const idPais = $('#txtIdPais').val();
       const nuevaDescripcion = $('#txtDescripcion').val();
       const tabla = $('#tbl').DataTable();
 
-      if(idCiudad) {
+      if(idPais) {
         // update
-        fetch(`/api/v1/ciudades/${idCiudad}`, {
+        fetch(`/api/v1/paises/${idPais}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json'
@@ -118,17 +118,17 @@ Ciudades
         .then(data => {
           if(data && !data.error && data.success) {
             tabla.ajax.reload();
-            Swal.fire("Actualizado", "La ciudad ha sido actualizada correctamente.", "success");
+            Swal.fire("Actualizado", "El pais ha sido actualizada correctamente.", "success");
           } else {
             Swal.fire(data.error);
           }
         }).catch(err => {
           console.error(err);
-          Swal.fire("Error", "Ocurrió un error al actualizar la ciudad.", "error");
+          Swal.fire("Error", "Ocurrió un error al actualizar el pais.", "error");
         });
       } else {
         // insert
-        fetch(`/api/v1/ciudades`, {
+        fetch(`/api/v1/paises`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -138,13 +138,13 @@ Ciudades
         .then(data => {
           if(data && !data.error && data.success) {
             tabla.ajax.reload();
-            Swal.fire("Actualizado", "La ciudad ha sido agregada correctamente.", "success");
+            Swal.fire("Actualizado", "El pais ha sido agregada correctamente.", "success");
           } else {
             Swal.fire(data.error);
           }
         }).catch(err => {
           console.error(err);
-          Swal.fire("Error", "Ocurrió un error al guardar la ciudad.", "error");
+          Swal.fire("Error", "Ocurrió un error al guardar el pais.", "error");
         });
       }
       $('#txtDescripcion').val("");
@@ -163,13 +163,13 @@ Ciudades
       }).then((result) => {
         if (result.isConfirmed) {
           //Swal.fire("Saved!", "", "success");
-          $('#modalTitle').text("Editar una Ciudad");
+          $('#modalTitle').text("Editar un Pais");
 
-          const idCiudad = $(this).data('id');
-          $('#txtIdCiudad').val(idCiudad);
+          const idPais = $(this).data('id');
+          $('#txtIdPais').val(idPais);
 
           // Necesitamos obtener la descripción del backend
-          fetch(`/api/v1/ciudades/${idCiudad}`, {
+          fetch(`/api/v1/paises/${idPais}`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json'
@@ -187,7 +187,7 @@ Ciudades
 
   const eliminar = () => {
     $('#tbl').on('click', 'button[name="btn_eliminar"]',function(){
-      const idCiudad = $(this).data('id');
+      const idPais = $(this).data('id');
       // Mostrar mensaje de confirmación usando sweetalert
       Swal.fire({
         title: "¿Deseas eliminar este registro?",
@@ -196,7 +196,7 @@ Ciudades
         cancelButtonText: `No`
       }).then((result) => {
         if (result.isConfirmed) {
-          fetch(`/api/v1/ciudades/${idCiudad}`, {
+          fetch(`/api/v1/paises/${idPais}`, {
             method: 'DELETE',
             headers: {
               'Content-Type': 'application/json'
@@ -214,7 +214,7 @@ Ciudades
               Swal.fire(data.error);
             }
           }).catch(err => {
-            Swal.fire("Error", "Ocurrió un error al eliminar la ciudad.", "error");
+            Swal.fire("Error", "Ocurrió un error al eliminar el pais.", "error");
           });
         }
       });
