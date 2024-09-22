@@ -6,6 +6,7 @@ app = Flask(__name__)
 from app.rutas.referenciales.ciudad.ciudad_routes import ciumod
 from app.rutas.referenciales.paises.pais_routes import paimod
 from app.rutas.referenciales.correo.correo_routes import cormod
+from app.rutas.referenciales.telefono.telefono_routes import telmod
 
 
 # registrar referenciales
@@ -13,6 +14,7 @@ modulo0 = '/referenciales'
 app.register_blueprint(ciumod, url_prefix=f'{modulo0}/ciudad')
 app.register_blueprint(paimod, url_prefix=f'{modulo0}/paises')
 app.register_blueprint(cormod, url_prefix=f'{modulo0}/correo')
+app.register_blueprint(telmod, url_prefix=f'{modulo0}/telefono')
 
 
 #ciudad
@@ -21,8 +23,11 @@ from app.rutas.referenciales.ciudad.ciudad_api import ciuapi
 #pais
 from app.rutas.referenciales.paises.pais_api import paisapi
 
-#coreo
+#correo
 from app.rutas.referenciales.correo.correo_api import correoapi
+
+#telefono
+from app.rutas.referenciales.telefono.telefono_api import telapi
 
 # APIS v1
 #Ciudad
@@ -36,3 +41,8 @@ app.register_blueprint(paisapi, url_prefix=version1)
 #correo
 version1 = '/api/v1'
 app.register_blueprint(correoapi, url_prefix=version1)
+
+
+#telefono
+version1 = '/api/v1'
+app.register_blueprint(telapi, url_prefix=version1)
