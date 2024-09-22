@@ -2,65 +2,65 @@
 from flask import current_app as app
 from app.conexion.Conexion import Conexion
 
-class PaisDao:
+class CorreoDao:
 
-    def getPaises(self):
+    def getCorreos(self):
 
-        paisSQL = """
+        correoSQL = """
         SELECT id, descripcion
-        FROM paises
+        FROM correos
         """
         # objeto conexion
         conexion = Conexion()
         con = conexion.getConexion()
         cur = con.cursor()
         try:
-            cur.execute(paisSQL)
-            paises = cur.fetchall() # trae datos de la bd
+            cur.execute(correoSQL)
+            correos = cur.fetchall() # trae datos de la bd
 
             # Transformar los datos en una lista de diccionarios
-            return [{'id': pais[0], 'descripcion': pais[1]} for pais in paises]
+            return [{'id': correo[0], 'descripcion': correo[1]} for correo in correos]
 
         except Exception as e:
-            app.logger.error(f"Error al obtener todas los paises: {str(e)}")
+            app.logger.error(f"Error al obtener todos los correos: {str(e)}")
             return []
 
         finally:
             cur.close()
             con.close()
 
-    def getPaisById(self, id):
+    def getCorreoById(self, id):
 
-        paisSQL = """
+        correoSQL = """
         SELECT id, descripcion
-        FROM paises WHERE id=%s
+        FROM correos WHERE id=%s
         """
         # objeto conexion
         conexion = Conexion()
         con = conexion.getConexion()
         cur = con.cursor()
         try:
-            cur.execute(paisSQL, (id,))
-            paisEncontrada = cur.fetchone() # Obtener una sola fila
-            if paisEncontrada:
+            cur.execute(correoSQL, (id,))
+            correoEncontrada = cur.fetchone() # Obtener una sola fila
+            if correoEncontrada:
                 return {
-                        "id": paisEncontrada[0],
-                        "descripcion": paisEncontrada[1]
-                    }  # Retornar los datos de pais
+                        "id": correoEncontrada[0],
+                        "descripcion": correoEncontrada[1]
+                    }  # Retornar los datos de correos
             else:
-                return None # Retornar None si no se encuentra el pais
+                return None # Retornar None si no se encuentra el correo
         except Exception as e:
-            app.logger.error(f"Error al obtener pais: {str(e)}")
+            app.logger.error(f"Error al obtener correo: {str(e)}")
             return None
 
         finally:
             cur.close()
             con.close()
 
-    def guardarPais(self, descripcion):
+    def guardarCorreo(self, descripcion):
 
-        insertPaisSQL = """
-        INSERT INTO paises(descripcion) VALUES(%s) RETURNING id
+        insertCorreoSQL = """
+        INSERT INTO correos(descripcion) VALUES(%s) RETURNING id
         """
 
         conexion = Conexion()
@@ -69,14 +69,14 @@ class PaisDao:
 
         # Ejecucion exitosa
         try:
-            cur.execute(insertPaisSQL, (descripcion,))
-            pais_id = cur.fetchone()[0]
+            cur.execute(insertCorreoSQL, (descripcion,))
+            correo_id = cur.fetchone()[0]
             con.commit() # se confirma la insercion
-            return pais_id
+            return correo_id
 
         # Si algo fallo entra aqui
         except Exception as e:
-            app.logger.error(f"Error al insertar pais: {str(e)}")
+            app.logger.error(f"Error al insertar correo: {str(e)}")
             con.rollback() # retroceder si hubo error
             return False
 
@@ -85,10 +85,10 @@ class PaisDao:
             cur.close()
             con.close()
 
-    def updatePais(self, id, descripcion):
+    def updateCorreo(self, id, descripcion):
 
-        updatePaisSQL = """
-        UPDATE paises
+        updateCorreoSQL = """
+        UPDATE correos
         SET descripcion=%s
         WHERE id=%s
         """
@@ -98,14 +98,14 @@ class PaisDao:
         cur = con.cursor()
 
         try:
-            cur.execute(updatePaisSQL, (descripcion, id,))
+            cur.execute(updateCorreoSQL, (descripcion, id,))
             filas_afectadas = cur.rowcount # Obtener el número de filas afectadas
             con.commit()
 
             return filas_afectadas > 0 # Retornar True si se actualizó al menos una fila
 
         except Exception as e:
-            app.logger.error(f"Error al actualizar pais: {str(e)}")
+            app.logger.error(f"Error al actualizar correo: {str(e)}")
             con.rollback()
             return False
 
@@ -113,10 +113,10 @@ class PaisDao:
             cur.close()
             con.close()
 
-    def deletePais(self, id):
+    def deleteCorreo(self, id):
 
-        updatePaisSQL = """
-        DELETE FROM paises
+        updateCorreoSQL = """
+        DELETE FROM correos
         WHERE id=%s
         """
 
@@ -125,14 +125,14 @@ class PaisDao:
         cur = con.cursor()
 
         try:
-            cur.execute(updatePaisSQL, (id,))
+            cur.execute(updateCorreoSQL, (id,))
             rows_affected = cur.rowcount
             con.commit()
 
             return rows_affected > 0  # Retornar True si se eliminó al menos una fila
 
         except Exception as e:
-            app.logger.error(f"Error al eliminar pais: {str(e)}")
+            app.logger.error(f"Error al eliminar correo: {str(e)}")
             con.rollback()
             return False
 
