@@ -40,7 +40,11 @@
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
-                <div class="sidebar-brand-text mx-3">SYS<sup>LP3</sup></div>
+                <div class="sidebar-brand-text mx-3">LP3
+                    
+                    <sup></sup>
+                
+                </div>
             </a>
 
             <!-- Divider -->
@@ -48,9 +52,9 @@
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="{{ url_for('index.indexIndex') }}">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>LP3</span></a>
+                    <span>Inicio</span></a>
             </li>
 
             <!-- Divider -->
@@ -75,6 +79,7 @@
                         <a class="collapse-item" href="{{ url_for('pais.paisIndex') }}">Pais</a>
                         <a class="collapse-item" href="{{ url_for('telefono.telefonoIndex') }}">Teléfono</a>
                         <a class="collapse-item" href="{{ url_for('direccion.direccionIndex') }}">Dirección</a>
+                        <a class="collapse-item" href="{{ url_for('persona.personaIndex') }}">Persona</a>
                     </div>
                 </div>
             </li>
