@@ -1,60 +1,60 @@
 from flask import Blueprint, request, jsonify, current_app as app
-from app.dao.referenciales.telefono.TelefonoDao import TelefonoDao
+from app.dao.referenciales.nacionalidad.NacionalidadDao import NacionalidadDao
 
-telapi = Blueprint('telapi', __name__)
+nacioapi = Blueprint('nacioapi', __name__)
 
-# Trae todas las ciudades
-@telapi.route('/telefonos', methods=['GET'])
-def getTelefonos():
-    teldao = TelefonoDao()
+# Trae todas las nacionalidades
+@nacioapi.route('/nacionalidades', methods=['GET'])
+def getNacionalidades():
+    nacionalidaddao = NacionalidadDao()
 
     try:
-        telefonos = teldao.getTelefonos()
+        nacionalidades = nacionalidaddao.getNacionalidades()
 
         return jsonify({
             'success': True,
-            'data': telefonos,
+            'data': nacionalidades,
             'error': None
         }), 200
 
     except Exception as e:
-        app.logger.error(f"Error al obtener todas los telefonos: {str(e)}")
+        app.logger.error(f"Error al obtener todas las nacionalidades: {str(e)}")
         return jsonify({
             'success': False,
             'error': 'Ocurrió un error interno. Consulte con el administrador.'
         }), 500
 
-@telapi.route('/telefonos/<int:telefono_id>', methods=['GET'])
-def getTelefono(telefono_id):
-    teldao = TelefonoDao()
+@nacioapi.route('/nacionalidades/<int:nacionalidad_id>', methods=['GET'])
+def getNacionalidad(nacionalidad_id):
+    nacionalidaddao = NacionalidadDao()
 
     try:
-        telefono = teldao.getTelefonoById(telefono_id)
+        nacionalidad = nacionalidaddao.getNacionalidadById(nacionalidad_id)
 
-        if telefono:
+        if nacionalidad:
             return jsonify({
                 'success': True,
-                'data': telefono,
+                'data': nacionalidad,
                 'error': None
             }), 200
         else:
             return jsonify({
                 'success': False,
-                'error': 'No se encontró la telefono con el ID proporcionado.'
+                'error': 'No se encontró la nacionalidad con el ID proporcionado.'
             }), 404
 
     except Exception as e:
-        app.logger.error(f"Error al obtener el telefono: {str(e)}")
+        app.logger.error(f"Error al obtener nacionalidad: {str(e)}")
         return jsonify({
             'success': False,
             'error': 'Ocurrió un error interno. Consulte con el administrador.'
         }), 500
 
-# Agrega una nueva telefono
-@telapi.route('/telefonos', methods=['POST'])
-def addTelefono():
+# Agrega una nueva nacionalidad
+@nacioapi.route('/nacionalidades', methods=['POST'])
+def addNacionalidad():
     data = request.get_json()
-    teldao = TelefonoDao()
+    nacionalidaddao = NacionalidadDao()
 
     # Validar que el JSON no esté vacío y tenga las propiedades necesarias
     campos_requeridos = ['descripcion']
@@ -69,26 +69,26 @@ def addTelefono():
 
     try:
         descripcion = data['descripcion'].upper()
-        telefono_id = teldao.guardarTelefono(descripcion)
-        if telefono_id is not None:
+        nacionalidad_id = nacionalidaddao.guardarNacionalidad(descripcion)
+        if nacionalidad_id is not None:
             return jsonify({
                 'success': True,
-                'data': {'id': telefono_id, 'descripcion': descripcion},
+                'data': {'id': nacionalidad_id, 'descripcion': descripcion},
                 'error': None
             }), 201
         else:
-            return jsonify({ 'success': False, 'error': 'No se pudo guardar el telefono. Consulte con el administrador.' }), 500
+            return jsonify({ 'success': False, 'error': 'No se pudo guardar la nacionalidad. Consulte con el administrador.' }), 500
     except Exception as e:
-        app.logger.error(f"Error al agregar telefono: {str(e)}")
+        app.logger.error(f"Error al agregar nacionalidad: {str(e)}")
         return jsonify({
             'success': False,
             'error': 'Ocurrió un error interno. Consulte con el administrador.'
         }), 500
 
-@telapi.route('/telefonos/<int:telefono_id>', methods=['PUT'])
-def updateTelefono(telefono_id):
+@nacioapi.route('/nacionalidades/<int:nacionalidad_id>', methods=['PUT'])
+def updateNacionalidad(nacionalidad_id):
     data = request.get_json()
-    teldao = TelefonoDao()
+    nacionalidaddao = NacionalidadDao()
 
     # Validar que el JSON no esté vacío y tenga las propiedades necesarias
     campos_requeridos = ['descripcion']
@@ -102,46 +102,45 @@ def updateTelefono(telefono_id):
                             }), 400
     descripcion = data['descripcion']
     try:
-        if teldao.updateTelefono(telefono_id, descripcion.upper()):
+        if nacionalidaddao.updateNacionalidad(nacionalidad_id, descripcion.upper()):
             return jsonify({
                 'success': True,
-                'data': {'id': telefono_id, 'descripcion': descripcion},
+                'data': {'id': nacionalidad_id, 'descripcion': descripcion},
                 'error': None
             }), 200
         else:
             return jsonify({
                 'success': False,
-                'error': 'No se encontró el telefono con el ID proporcionado o no se pudo actualizar.'
+                'error': 'No se encontró la nacionalidad con el ID proporcionado o no se pudo actualizar.'
             }), 404
     except Exception as e:
-        app.logger.error(f"Error al actualizar telefono: {str(e)}")
+        app.logger.error(f"Error al actualizar nacionalidad: {str(e)}")
         return jsonify({
             'success': False,
             'error': 'Ocurrió un error interno. Consulte con el administrador.'
         }), 500
 
-@telapi.route('/telefonos/<int:telefono_id>', methods=['DELETE'])
-def deleteTelefono(telefono_id):
-    teldao = TelefonoDao()
+@nacioapi.route('/nacionalidades/<int:nacionalidad_id>', methods=['DELETE'])
+def deleteNacionalidad(nacionalidad_id):
+    nacionalidaddao = NacionalidadDao()
 
     try:
-        # Usar el retorno de eliminarCiudad para determinar el éxito
-        if teldao.deleteTelefono(telefono_id):
+        # Usar el retorno de eliminarNacionalidad para determinar el éxito
+        if nacionalidaddao.deleteNacionalidad(nacionalidad_id):
             return jsonify({
                 'success': True,
-                'mensaje': f'Telefono con ID {telefono_id} eliminada correctamente.',
+                'mensaje': f'Nacionalidad con ID {nacionalidad_id} eliminada correctamente.',
                 'error': None
             }), 200
         else:
             return jsonify({
                 'success': False,
-                'error': 'No se encontró el telefono con el ID proporcionado o no se pudo eliminar.'
+                'error': 'No se encontró la nacionalidad con el ID proporcionado o no se pudo eliminar.'
             }), 404
 
     except Exception as e:
-        app.logger.error(f"Error al eliminar telefono: {str(e)}")
+        app.logger.error(f"Error al eliminar nacionalidad: {str(e)}")
         return jsonify({
             'success': False,
             'error': 'Ocurrió un error interno. Consulte con el administrador.'
         }), 500
-    

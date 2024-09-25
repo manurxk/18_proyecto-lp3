@@ -1,15 +1,109 @@
 {% extends 'base.html' %}
     
 {% block titulo %}
-index
+Correos
 {% endblock %}
 
 {% block contenido %}
 <div class="container mt-4">
-   <H1>PÁGINA PRINCIPAL</H1>
+   <H4>---------------------------------</H4>
+    <h2>INICIO</h2>
+    <H4>---------------------------------</H4>
+
+    <!-- tarjeta -->
+    <div class="card">
+     
+      <div class="card-body">
+       <h5>Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui voluptatibus aliquam exercitationem modi quo, alias, eligendi non incidunt corporis saepe, ea voluptatem quia! Dicta, recusandae saepe eligendi mollitia hic fugit.</h5>
+      </div>
+    </div><br>
+
+
+
+
+
+
+
+
+
+
+
+        <style>
+            /* Contenedor para los botones */
+            .button-container {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-around;
+                margin: 20px;
+            }
+    
+            /* Estilo base para los botones */
+            .large-button {
+                flex: 1 0 30%;
+                max-width: 30%;
+                margin: 10px;
+                padding: 20px;
+                background-color: #17a2b8; /* Color info de Bootstrap */
+                color: white;
+                border: none;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 18px;
+                cursor: pointer;
+                transition: background-color 0.3s;
+                border-radius: 5px; /* Borde redondeado */
+            }
+    
+            /* Efecto hover para los botones */
+            .large-button:hover {
+                background-color: #138496; /* Color oscuro del botón info */
+            }
+    
+            /* Responsivo */
+            @media (max-width: 768px) {
+                .large-button {
+                    flex: 1 0 45%;
+                    max-width: 45%;
+                }
+            }
+    
+            @media (max-width: 480px) {
+                .large-button {
+                    flex: 1 0 100%;
+                    max-width: 100%;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="button-container">
+            <a class="large-button" href="{{ url_for('correo.correoIndex') }}">Correo</a>
+            <a class="large-button" href="{{ url_for('ciudad.ciudadIndex') }}">Ciudad</a>
+            <a class="large-button" href="{{ url_for('pais.paisIndex') }}">País</a>
+            <a class="large-button" href="{{ url_for('telefono.telefonoIndex') }}">Teléfono</a>
+            <a class="large-button" href="{{ url_for('direccion.direccionIndex') }}">Dirección</a>
+            <a class="large-button" href="{{ url_for('persona.personaIndex') }}">Persona</a>
+            <a class="large-button" href="{{ url_for('ocupacion.ocupacionIndex') }}">Ocupacion</a>
+            <a class="large-button" href="{{ url_for('nacionalidad.nacionalidadIndex') }}">Nacionalidad</a>
+            <a class="large-button" href="#">Botón 9</a>
+            <a class="large-button" href="#">Botón 10</a>
+            <a class="large-button" href="#">Botón 11</a>
+            <a class="large-button" href="#">Botón 12</a>
+            <a class="large-button" href="#">Botón 13</a>
+            <a class="large-button" href="#">Botón 14</a>
+            <a class="large-button" href="#">Botón 15</a>
+        </div>
+
+    
+
+
+
+    <br>
+ 
 
 {% endblock %}
 
 {% block js %}
-
+#scripts
 {% endblock %}
