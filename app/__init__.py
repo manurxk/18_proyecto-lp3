@@ -34,7 +34,8 @@ from app.rutas.referenciales.direccion.direccion_routes import dirmod
 from app.rutas.referenciales.persona.persona_routes import permod
 from app.rutas.referenciales.nacionalidad.nacionalidad_routes import naciomod  #nacionalidad
 from app.rutas.referenciales.ocupacion.ocupacion_routes import ocupmod  #ocupacion
-
+from app.rutas.referenciales.estado_civil.estado_civil_routes import estacivmod  #estado civil
+from app.rutas.referenciales.sexo.sexo_routes import sexmod  #sexo
 # registrar referenciales
 modulo0 = '/referenciales'
 
@@ -48,7 +49,9 @@ app.register_blueprint(dirmod, url_prefix=f'{modulo0}/direccion')
 app.register_blueprint(permod, url_prefix=f'{modulo0}/persona')
 app.register_blueprint(naciomod, url_prefix=f'{modulo0}/nacionalidad')  #nacionalidad
 app.register_blueprint(ocupmod, url_prefix=f'{modulo0}/ocupacion')  #ocupacion
-
+app.register_blueprint(estacivmod, url_prefix=f'{modulo0}/estadocivil')  #estado civil
+app.register_blueprint(sexmod, url_prefix=f'{modulo0}/sexo')  #sexo
+ 
 
 #ciudad
 from app.rutas.referenciales.ciudad.ciudad_api import ciuapi
@@ -73,6 +76,13 @@ from app.rutas.referenciales.nacionalidad.nacionalidad_api import nacioapi
 
 #nacionalidad
 from app.rutas.referenciales.ocupacion.ocupacion_api import ocupapi
+
+
+#estado civil
+from app.rutas.referenciales.estado_civil.estado_civil_api import estacivapi
+
+#sexo
+from app.rutas.referenciales.sexo.sexo_api import sexapi
 
 # APIS v1
 #Ciudad
@@ -108,3 +118,12 @@ app.register_blueprint(nacioapi, url_prefix=version1)
 #ocupacion
 version1 = '/api/v1'
 app.register_blueprint(ocupapi, url_prefix=version1)
+
+
+#Estado civil
+version1 = '/api/v1'
+app.register_blueprint(estacivapi, url_prefix=version1)
+
+#sexo
+version1 = '/api/v1'
+app.register_blueprint(sexapi, url_prefix=version1)

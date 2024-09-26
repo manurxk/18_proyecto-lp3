@@ -74,14 +74,22 @@
                 </a>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="{{ url_for('correo.correoIndex') }}">Correo</a>
-                        <a class="collapse-item" href="{{ url_for('ciudad.ciudadIndex') }}">Ciudad</a>
-                        <a class="collapse-item" href="{{ url_for('pais.paisIndex') }}">Pais</a>
+                        <a class="collapse-item" href="{{ url_for('ciudad.ciudadIndex') }}">1- Ciudad</a>
+                        <a class="collapse-item" href="{{ url_for('pais.paisIndex') }}">2- Pais</a>
+                        <a class="collapse-item" href="{{ url_for('nacionalidad.nacionalidadIndex') }}">3- Nacionalidad</a>
+                        <a class="collapse-item" href="{{ url_for('ocupacion.ocupacionIndex') }}">4- Ocupación</a> 
+                        <a class="collapse-item" href="{{ url_for('estadocivil.estadocivilIndex') }}">5- Estado Civil</a>
+                        <a class="collapse-item" href="{{ url_for('sexo.sexoIndex') }}">6- Sexo</a>
+                        <a class="collapse-item" href="{{ url_for('persona.personaIndex') }}">7- Persona</a>
+                        <a class="collapse-item" href="#">8-</a> 
+                        <a class="collapse-item" href="#">9-</a> 
+                        <a class="collapse-item" href="#">10-</a> 
+
+                        <a class="collapse-item" href="{{ url_for('correo.correoIndex') }}">Correo</a> 
                         <a class="collapse-item" href="{{ url_for('telefono.telefonoIndex') }}">Teléfono</a>
                         <a class="collapse-item" href="{{ url_for('direccion.direccionIndex') }}">Dirección</a>
-                        <a class="collapse-item" href="{{ url_for('persona.personaIndex') }}">Persona</a>
-                        <a class="collapse-item" href="{{ url_for('nacionalidad.nacionalidadIndex') }}">Nacionalidad</a>
-                        <a class="collapse-item" href="{{ url_for('ocupacion.ocupacionIndex') }}">Ocupación</a> 
+
+
                     </div>
                 </div>
             </li>
