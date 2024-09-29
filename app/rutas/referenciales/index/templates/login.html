@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
     
 {% block titulo %}
-Inicio
+Correos
 {% endblock %}
 
 {% block contenido %}
@@ -119,12 +119,8 @@ Inicio
 <body>
     <div class="welcome-banner">
         <div class="welcome-text">
-            <h1>Bienvenido</h1>
-            <p>Que hacemos hoy</p>
-            <form>
-                <label for="fecha">Fecha:</label>
-                <input type="date" id="fecha" name="fecha">
-            </form>
+            <h1>Pagina No encotrada</h1>
+            <p></p>
             
         </div>
         <div class="welcome-image">
@@ -140,45 +136,8 @@ Inicio
 
     
    
-    <body>
-        <div class="button-container">
-            <a class="large-button" href="{{ url_for('ciudad.ciudadIndex') }}">Ciudad</a>
-            <a class="large-button" href="{{ url_for('pais.paisIndex') }}">País</a>
-            <a class="large-button" href="{{ url_for('estadocita.estadocitaIndex') }}">Estado de la Cita</a> 
-            <a class="large-button" href="{{ url_for('especialidad.especialidadIndex') }}">Especialidad</a>   
-            <a class="large-button" href="{{ url_for('dia.diaIndex') }}">Dia</a> 
-            <a class="large-button" href="{{ url_for('persona.personaIndex') }}">Persona</a>
-            <a class="large-button" href="{{ url_for('ocupacion.ocupacionIndex') }}">Ocupacion</a>
-            <a class="large-button" href="{{ url_for('nacionalidad.nacionalidadIndex') }}">Nacionalidad</a>
-            <a class="large-button" href="{{ url_for('estadocivil.estadocivilIndex') }}">Estado Civil</a>
-            <a class="large-button" href="{{ url_for('sexo.sexoIndex') }}">Sexo</a>
-            <a class="large-button" href="#">Botón 11</a>
-            <a class="large-button" href="#">Botón 12</a>
-            <a class="large-button" href="#">Botón 13</a>
-            <a class="large-button" href="#">Botón 14</a>
-            <a class="large-button" href="#">Botón 15</a>
-        </div>
-
-    
-
-
-
-    <br>
- <br>
   
-  <head></head>
-    <meta charset="UTF-8">
-    <script>
-        function ponerFechaActual() {
-            // Obtener la fecha actual en formato YYYY-MM-DD
-            let hoy = new Date().toISOString().split('T')[0];
-            // Asignar la fecha al input
-            document.getElementById('fecha').value = hoy;
-        }
-    </script>
-</head>
-<body onload="ponerFechaActual()">
-   
+  
  
 
 {% endblock %}

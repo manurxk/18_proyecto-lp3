@@ -2,32 +2,10 @@ from flask import Flask
 
 app = Flask(__name__)
     
-
-
-
-
-
-  # Importar el blueprint de rutas principales
-
-def create_app():
-    app = Flask(__name__)
-    
-    # Registrar los Blueprints
-    app.register_blueprint()
-
-    return app
-
-
-
-
-
-
 # importar referenciales
-
-from app.rutas.referenciales.index.index_routes import indmod
-
-from app.rutas.referenciales.ciudad.ciudad_routes import ciumod
-from app.rutas.referenciales.paises.pais_routes import paimod
+from app.rutas.referenciales.index.index_routes import indmod #index
+from app.rutas.referenciales.ciudad.ciudad_routes import ciumod #ciudad
+from app.rutas.referenciales.paises.pais_routes import paimod #pais
 from app.rutas.referenciales.persona.persona_routes import permod
 from app.rutas.referenciales.nacionalidad.nacionalidad_routes import naciomod  #nacionalidad
 from app.rutas.referenciales.ocupacion.ocupacion_routes import ocupmod  #ocupacion
@@ -40,12 +18,10 @@ from app.rutas.referenciales.estado_cita.estado_cita_routes import estacitmod  #
 
 # registrar referenciales
 modulo0 = '/referenciales'
-
-app.register_blueprint(indmod, url_prefix=f'{modulo0}/index')
-
-app.register_blueprint(ciumod, url_prefix=f'{modulo0}/ciudad')
-app.register_blueprint(paimod, url_prefix=f'{modulo0}/paises')
-app.register_blueprint(permod, url_prefix=f'{modulo0}/persona')
+app.register_blueprint(indmod, url_prefix=f'{modulo0}/index') #index
+app.register_blueprint(ciumod, url_prefix=f'{modulo0}/ciudad') #ciudad
+app.register_blueprint(paimod, url_prefix=f'{modulo0}/paises') #paises
+app.register_blueprint(permod, url_prefix=f'{modulo0}/persona') #persona
 app.register_blueprint(naciomod, url_prefix=f'{modulo0}/nacionalidad')  #nacionalidad
 app.register_blueprint(ocupmod, url_prefix=f'{modulo0}/ocupacion')  #ocupacion
 app.register_blueprint(estacivmod, url_prefix=f'{modulo0}/estadocivil')  #estado civil
@@ -58,38 +34,24 @@ app.register_blueprint(diamod, url_prefix=f'{modulo0}/dia') #dia
 
 #ciudad
 from app.rutas.referenciales.ciudad.ciudad_api import ciuapi
-
 #pais
 from app.rutas.referenciales.paises.pais_api import paisapi
-
 #persona
 from app.rutas.referenciales.persona.persona_api import perapi
-
 #nacionalidad
 from app.rutas.referenciales.nacionalidad.nacionalidad_api import nacioapi
-
 #nacionalidad
 from app.rutas.referenciales.ocupacion.ocupacion_api import ocupapi
-
 #estado civil
 from app.rutas.referenciales.estado_civil.estado_civil_api import estacivapi
-
 #sexo
 from app.rutas.referenciales.sexo.sexo_api import sexapi
-
 #estado de la cita
 from app.rutas.referenciales.estado_cita.estado_cita_api import estacitapi
-
 #especialidad
 from app.rutas.referenciales.especialidad.especialidad_api import especiapi
-
 #dia
 from app.rutas.referenciales.dia.dia_api import diaapi
-
-
-
-
-
 
 
 # APIS v1
@@ -152,6 +114,23 @@ app.register_blueprint(diaapi, url_prefix=version1)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 from flask import render_template, request, redirect, url_for
 
 @app.route('/buscar', methods=['GET'])
@@ -181,3 +160,18 @@ def buscar():
         # Renderizar una página con un mensaje de "no encontrado"
         return render_template('no_encontrado.html', termino=termino)
     
+from flask import render_template, request, redirect, url_for
+
+@app.route('/login')
+def login():
+    return render_template('login.html')
+
+      # Importar el blueprint de rutas principales
+
+def create_app():
+    app = Flask(__name__)
+    
+    # Registrar los Blueprints
+    app.register_blueprint()
+
+    return app
