@@ -81,13 +81,18 @@
                         <a class="collapse-item" href="{{ url_for('estadocivil.estadocivilIndex') }}">5- Estado Civil</a>
                         <a class="collapse-item" href="{{ url_for('sexo.sexoIndex') }}">6- Sexo</a>
                         <a class="collapse-item" href="{{ url_for('persona.personaIndex') }}">7- Persona</a>
-                        <a class="collapse-item" href="#">8-</a> 
-                        <a class="collapse-item" href="#">9-</a> 
-                        <a class="collapse-item" href="#">10-</a> 
-
-                        <a class="collapse-item" href="{{ url_for('correo.correoIndex') }}">Correo</a> 
-                        <a class="collapse-item" href="{{ url_for('telefono.telefonoIndex') }}">Teléfono</a>
-                        <a class="collapse-item" href="{{ url_for('direccion.direccionIndex') }}">Dirección</a>
+                        <a class="collapse-item" href="#"></a>
+                        <a class="collapse-item" href="#"></a>
+                        <a class="collapse-item" href="#">8-Especialidad</a> 
+                        <a class="collapse-item" href="#">9-turno</a> 
+                        <a class="collapse-item" href="#">10-dia</a> 
+                        <a class="collapse-item" href="#">11-duracion de consulta</a> 
+                        <a class="collapse-item" href="#">12- Estado de cita</a> 
+                        <a class="collapse-item" href="#">13-</a> 
+                        <a class="collapse-item" href="#">14-</a> 
+                        <a class="collapse-item" href="#">15-</a> 
+                        <a class="collapse-item" href="#"></a> 
+                        <a class="collapse-item" href="#"></a> 
 
 
                     </div>
@@ -138,19 +143,54 @@
                         <i class="fa fa-bars"></i>
                     </button>
 
-                    <!-- Topbar Search -->
-                    <form
-                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <form method="GET" action="{{ url_for('buscar') }}" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                         <div class="input-group">
-                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
-                                aria-label="Search" aria-describedby="basic-addon2">
+                            <input type="text" class="form-control bg-light border-0 small" placeholder="Buscar..." aria-label="Search" aria-describedby="basic-addon2" name="termino">
                             <div class="input-group-append">
-                                <button class="btn btn-success" type="button">
+                                <button class="btn btn-success" type="submit">
                                     <i class="fas fa-search fa-sm"></i>
                                 </button>
                             </div>
                         </div>
                     </form>
+                    
+          
+
+
+
+
+
+
+
+
+
+
+
+
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
