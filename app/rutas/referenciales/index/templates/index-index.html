@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
     
 {% block titulo %}
-Correos
+Inicio
 {% endblock %}
 
 {% block contenido %}
@@ -138,11 +138,11 @@ Correos
    
     <body>
         <div class="button-container">
-            <a class="large-button" href="#">C</a>
             <a class="large-button" href="{{ url_for('ciudad.ciudadIndex') }}">Ciudad</a>
             <a class="large-button" href="{{ url_for('pais.paisIndex') }}">País</a>
-            <a class="large-button" href="#"></a>
-            <a class="large-button" href="#"></a>
+            <a class="large-button" href="{{ url_for('estadocita.estadocitaIndex') }}">Estado de la Cita</a> 
+            <a class="large-button" href="{{ url_for('especialidad.especialidadIndex') }}">Especialidad</a>   
+            <a class="large-button" href="{{ url_for('dia.diaIndex') }}">Dia</a> 
             <a class="large-button" href="{{ url_for('persona.personaIndex') }}">Persona</a>
             <a class="large-button" href="{{ url_for('ocupacion.ocupacionIndex') }}">Ocupacion</a>
             <a class="large-button" href="{{ url_for('nacionalidad.nacionalidadIndex') }}">Nacionalidad</a>

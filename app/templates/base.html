@@ -33,10 +33,10 @@
     <div id="wrapper">
 
         <!-- Sidebar -->
-        <ul class="navbar-nav bg-gradient-success sidebar sidebar-dark accordion" id="accordionSidebar">
+        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ url_for('index.indexIndex') }}">
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
@@ -62,7 +62,7 @@
 
             <!-- Heading -->
             <div class="sidebar-heading">
-                Mantenimiento y Seguridad
+                Informaciones
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
@@ -70,29 +70,24 @@
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                     aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-fw fa-cog"></i>
-                    <span>Referenciales</span>
+                    <span>Consultar Datos   </span>
                 </a>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="{{ url_for('ciudad.ciudadIndex') }}">1- Ciudad</a>
-                        <a class="collapse-item" href="{{ url_for('pais.paisIndex') }}">2- Pais</a>
-                        <a class="collapse-item" href="{{ url_for('nacionalidad.nacionalidadIndex') }}">3- Nacionalidad</a>
-                        <a class="collapse-item" href="{{ url_for('ocupacion.ocupacionIndex') }}">4- Ocupación</a> 
-                        <a class="collapse-item" href="{{ url_for('estadocivil.estadocivilIndex') }}">5- Estado Civil</a>
-                        <a class="collapse-item" href="{{ url_for('sexo.sexoIndex') }}">6- Sexo</a>
-                        <a class="collapse-item" href="{{ url_for('persona.personaIndex') }}">7- Persona</a>
-                        <a class="collapse-item" href="#"></a>
-                        <a class="collapse-item" href="#"></a>
-                        <a class="collapse-item" href="#">8-Especialidad</a> 
-                        <a class="collapse-item" href="#">9-turno</a> 
-                        <a class="collapse-item" href="#">10-dia</a> 
-                        <a class="collapse-item" href="#">11-duracion de consulta</a> 
-                        <a class="collapse-item" href="#">12- Estado de cita</a> 
-                        <a class="collapse-item" href="#">13-</a> 
-                        <a class="collapse-item" href="#">14-</a> 
-                        <a class="collapse-item" href="#">15-</a> 
-                        <a class="collapse-item" href="#"></a> 
-                        <a class="collapse-item" href="#"></a> 
+
+
+                        <a class="collapse-item" href="{{ url_for('persona.personaIndex') }}">Persona</a>
+                        <a class="collapse-item" href="{{ url_for('ocupacion.ocupacionIndex') }}">Ocupación</a> 
+                        <a class="collapse-item" href="{{ url_for('estadocivil.estadocivilIndex') }}">Estado Civil</a>
+                        <a class="collapse-item" href="{{ url_for('sexo.sexoIndex') }}">Sexo</a>
+                        
+                        <a class="collapse-item" href="#">_____________________</a> 
+
+                        <a class="collapse-item" href="{{ url_for('ciudad.ciudadIndex') }}">Ciudad</a>
+                        <a class="collapse-item" href="{{ url_for('pais.paisIndex') }}">Pais</a>
+                        <a class="collapse-item" href="{{ url_for('nacionalidad.nacionalidadIndex') }}">Nacionalidad</a>
+                 
+                   
 
 
                     </div>
@@ -109,10 +104,14 @@
                 <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item text-wrap" href="">Registrar pedido de compras</a>
-                        <a class="collapse-item" href="">Proceso 2</a>
-                        <a class="collapse-item" href="">Proceso 3</a>
-                        <a class="collapse-item" href="">Proceso 4</a>
+                        <a class="collapse-item" href="{{ url_for('estadocita.estadocitaIndex') }}">Estado de la Cita</a> 
+                        <a class="collapse-item" href="{{ url_for('especialidad.especialidadIndex') }}">Especialidad</a>   
+                        <a class="collapse-item" href="{{ url_for('dia.diaIndex') }}">Dia</a> 
+                        <a class="collapse-item" href="#">11-turno</a> 
+                        <a class="collapse-item" href="#">12-duracion de consulta</a> 
+                        <a class="collapse-item" href="#">13-</a> 
+                        <a class="collapse-item" href="#">14-</a> 
+                        <a class="collapse-item" href="#">15-</a> 
                     </div>
                 </div>
             </li>
