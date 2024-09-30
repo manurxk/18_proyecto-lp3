@@ -178,15 +178,35 @@ def buscar():
     # Definir las rutas posibles
     rutas = {
         'ciudad': 'ciudad.ciudadIndex',
-        'pais': 'pais.paisIndex',
-        'nacionalidad': 'nacionalidad.nacionalidadIndex',
-        'ocupacion': 'ocupacion.ocupacionIndex',
-        'estado civil': 'estadocivil.estadocivilIndex',
-        'sexo': 'sexo.sexoIndex',
-        'persona': 'persona.personaIndex',
-        'cita': 'estadocita.estadocitaIndex',
-        'especialidad': 'especialidad.especialidadIndex',
-        'dias': 'dia.diaIndex',
+    'ciudades': 'ciudad.ciudadIndex',  # Agregado
+    'pais': 'pais.paisIndex',
+    'paises': 'pais.paisIndex',  # Agregado
+    'nacionalidad': 'nacionalidad.nacionalidadIndex',
+    'nacionalidades': 'nacionalidad.nacionalidadIndex',  # Agregado
+    'ocupacion': 'ocupacion.ocupacionIndex',
+    'ocupaciones': 'ocupacion.ocupacionIndex',  # Agregado
+    'estado civil': 'estadocivil.estadocivilIndex',
+    'estados civiles': 'estadocivil.estadocivilIndex',  # Agregado
+    'sexo': 'sexo.sexoIndex',
+    'sexos': 'sexo.sexoIndex',  # Agregado
+    'persona': 'persona.personaIndex',
+    'personas': 'persona.personaIndex',  # Agregado
+    'cita': 'estadocita.estadocitaIndex',
+    'citas': 'estadocita.estadocitaIndex',  # Agregado
+    'especialidad': 'especialidad.especialidadIndex',
+    'especialidades': 'especialidad.especialidadIndex',  # Agregado
+    'dias': 'dia.diaIndex',
+    'dia': 'dia.diaIndex',  # Agregado
+    'diagnostico': 'diagnostico.diagnosticoIndex',
+    'diagnosticos': 'diagnostico.diagnosticoIndex',  # Agregado
+    'duracion consulta': 'duracionconsulta.duracionconsultaIndex',
+    'duraciones consulta': 'duracionconsulta.duracionconsultaIndex',  # Agregado
+    'turno': 'turno.turnoIndex',
+    'turnos': 'turno.turnoIndex',  # Agregado
+    'test utilizados': 'instrumento.instrumentoIndex',
+    'tests utilizados': 'instrumento.instrumentoIndex',  # Agregado
+    'tratamientos': 'tratamiento.tratamientoIndex',
+    'tratamiento': 'tratamiento.tratamientoIndex'  # Agregado
     }
 
     # Verificar si el término coincide con alguna clave en rutas
@@ -202,6 +222,13 @@ from flask import render_template, request, redirect, url_for
 @app.route('/login')
 def login():
     return render_template('login.html')
+
+
+@app.route('/perfil')
+def perfil():
+    return render_template('perfil_usuario.html')
+
+
 
       # Importar el blueprint de rutas principales
 
