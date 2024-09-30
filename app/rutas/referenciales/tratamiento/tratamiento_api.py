@@ -1,60 +1,60 @@
 from flask import Blueprint, request, jsonify, current_app as app
-from app.dao.referenciales.turno.TurnoDao import TurnoDao
+from app.dao.referenciales.ciudad.CiudadDao import CiudadDao
 
-turnoapi = Blueprint('turnoapi', __name__)
+ciuapi = Blueprint('ciuapi', __name__)
 
-# Trae todos los turnos
-@turnoapi.route('/turnos', methods=['GET'])
-def getTurnos():
-    turnodao = TurnoDao()
+# Trae todas las ciudades
+@ciuapi.route('/ciudades', methods=['GET'])
+def getCiudades():
+    ciudao = CiudadDao()
 
     try:
-        turnos = turnodao.getTurnos()
+        ciudades = ciudao.getCiudades()
 
         return jsonify({
             'success': True,
-            'data': turnos,
+            'data': ciudades,
             'error': None
         }), 200
 
     except Exception as e:
-        app.logger.error(f"Error al obtener todos los turnos: {str(e)}")
+        app.logger.error(f"Error al obtener todas las ciudades: {str(e)}")
         return jsonify({
             'success': False,
             'error': 'Ocurrió un error interno. Consulte con el administrador.'
         }), 500
 
-@turnoapi.route('/turnos/<int:turno_id>', methods=['GET'])
-def getTurno(turno_id):
-    turnodao = TurnoDao()
+@ciuapi.route('/ciudades/<int:ciudad_id>', methods=['GET'])
+def getCiudad(ciudad_id):
+    ciudao = CiudadDao()
 
     try:
-        turno = turnodao.getTurnoById(turno_id)
+        ciudad = ciudao.getCiudadById(ciudad_id)
 
-        if turno:
+        if ciudad:
             return jsonify({
                 'success': True,
-                'data': turno,
+                'data': ciudad,
                 'error': None
             }), 200
         else:
             return jsonify({
                 'success': False,
-                'error': 'No se encontró el turno con el ID proporcionado.'
+                'error': 'No se encontró la ciudad con el ID proporcionado.'
             }), 404
 
     except Exception as e:
-        app.logger.error(f"Error al obtener turno: {str(e)}")
+        app.logger.error(f"Error al obtener ciudad: {str(e)}")
         return jsonify({
             'success': False,
             'error': 'Ocurrió un error interno. Consulte con el administrador.'
         }), 500
 
-# Agrega un nuevo turno
-@turnoapi.route('/turnos', methods=['POST'])
-def addTurno():
+# Agrega una nueva ciudad
+@ciuapi.route('/ciudades', methods=['POST'])
+def addCiudad():
     data = request.get_json()
-    turnodao = TurnoDao()
+    ciudao = CiudadDao()
 
     # Validar que el JSON no esté vacío y tenga las propiedades necesarias
     campos_requeridos = ['descripcion']
@@ -69,26 +69,26 @@ def addTurno():
 
     try:
         descripcion = data['descripcion'].upper()
-        turno_id = turnodao.guardarTurno(descripcion)
-        if turno_id is not None:
+        ciudad_id = ciudao.guardarCiudad(descripcion)
+        if ciudad_id is not None:
             return jsonify({
                 'success': True,
-                'data': {'id': turno_id, 'descripcion': descripcion},
+                'data': {'id': ciudad_id, 'descripcion': descripcion},
                 'error': None
             }), 201
         else:
-            return jsonify({ 'success': False, 'error': 'No se pudo guardar el turno. Consulte con el administrador.' }), 500
+            return jsonify({ 'success': False, 'error': 'No se pudo guardar la ciudad. Consulte con el administrador.' }), 500
     except Exception as e:
-        app.logger.error(f"Error al agregar turno: {str(e)}")
+        app.logger.error(f"Error al agregar ciudad: {str(e)}")
         return jsonify({
             'success': False,
             'error': 'Ocurrió un error interno. Consulte con el administrador.'
         }), 500
 
-@turnoapi.route('/turnos/<int:turno_id>', methods=['PUT'])
-def updateTurno(turno_id):
+@ciuapi.route('/ciudades/<int:ciudad_id>', methods=['PUT'])
+def updateCiudad(ciudad_id):
     data = request.get_json()
-    turnodao = TurnoDao()
+    ciudao = CiudadDao()
 
     # Validar que el JSON no esté vacío y tenga las propiedades necesarias
     campos_requeridos = ['descripcion']
@@ -102,44 +102,44 @@ def updateTurno(turno_id):
                             }), 400
     descripcion = data['descripcion']
     try:
-        if turnodao.updateTurno(turno_id, descripcion.upper()):
+        if ciudao.updateCiudad(ciudad_id, descripcion.upper()):
             return jsonify({
                 'success': True,
-                'data': {'id': turno_id, 'descripcion': descripcion},
+                'data': {'id': ciudad_id, 'descripcion': descripcion},
                 'error': None
             }), 200
         else:
             return jsonify({
                 'success': False,
-                'error': 'No se encontró el turno con el ID proporcionado o no se pudo actualizar.'
+                'error': 'No se encontró la ciudad con el ID proporcionado o no se pudo actualizar.'
             }), 404
     except Exception as e:
-        app.logger.error(f"Error al actualizar turno: {str(e)}")
+        app.logger.error(f"Error al actualizar ciudad: {str(e)}")
         return jsonify({
             'success': False,
             'error': 'Ocurrió un error interno. Consulte con el administrador.'
         }), 500
 
-@turnoapi.route('/turnos/<int:turno_id>', methods=['DELETE'])
-def deleteTurno(turno_id):
-    turnodao = TurnoDao()
+@ciuapi.route('/ciudades/<int:ciudad_id>', methods=['DELETE'])
+def deleteCiudad(ciudad_id):
+    ciudao = CiudadDao()
 
     try:
-        # Usar el retorno de eliminarTurno para determinar el éxito
-        if turnodao.deleteTurno(turno_id):
+        # Usar el retorno de eliminarCiudad para determinar el éxito
+        if ciudao.deleteCiudad(ciudad_id):
             return jsonify({
                 'success': True,
-                'mensaje': f'Turno con ID {turno_id} eliminado correctamente.',
+                'mensaje': f'Ciudad con ID {ciudad_id} eliminada correctamente.',
                 'error': None
             }), 200
         else:
             return jsonify({
                 'success': False,
-                'error': 'No se encontró el turno con el ID proporcionado o no se pudo eliminar.'
+                'error': 'No se encontró la ciudad con el ID proporcionado o no se pudo eliminar.'
             }), 404
 
     except Exception as e:
-        app.logger.error(f"Error al eliminar turno: {str(e)}")
+        app.logger.error(f"Error al eliminar ciudad: {str(e)}")
         return jsonify({
             'success': False,
             'error': 'Ocurrió un error interno. Consulte con el administrador.'

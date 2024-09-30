@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
     
 {% block titulo %}
-Turnos
+Ciudades
 {% endblock %}
 
 {% block contenido %}
 <div class="container mt-4">
-    <h3>Listar Turnos</h3>
+    <h3>Listar Ciudades</h3>
 
     <!-- tarjeta -->
     <div class="card">
@@ -29,6 +29,7 @@ Turnos
 
     <!-- El formulario -->
     <div class="modal" id="modalFormulario">
+      <!-- La clase modal-dialog-centered centra el modal -->
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
 
@@ -41,9 +42,9 @@ Turnos
           <!-- Modal body -->
           <div class="modal-body">
             <div class="form-group">
-              <input type="hidden" id="txtIdTurno">
+              <input type="hidden" id="txtIdCiudad">
               <label for="txtDescripcion">Descripción:</label>
-              <input type="text" class="form-control" placeholder="Ingrese el turno" id="txtDescripcion">
+              <input type="text" class="form-control" placeholder="Ingrese alguna ciudad" id="txtDescripcion">
             </div>
           </div>
 
@@ -76,7 +77,7 @@ Turnos
       language: {
         url: "{{ url_for('static', filename='vendor/datatables/es-ES.json') }}",
       },
-      ajax:'/api/v1/turnos',
+      ajax:'/api/v1/ciudades',
       columns: [
         { data: 'descripcion' },
         { data: function(row) {
@@ -90,8 +91,10 @@ Turnos
 
   const agregar = () => {
     $('#btnAgregar').on('click', function(){
-      $('#modalTitle').text("Agregar un Turno");
-      $('#txtIdTurno').val("");
+      // Setear un título a modal
+      $('#modalTitle').text("Agregar una Ciudad");
+      // inicia ventana modal
+      $('#txtIdCiudad').val("");
       $('#txtDescripcion').val("");
       $('#modalFormulario').modal();
     });
@@ -99,13 +102,13 @@ Turnos
 
   const guardar = () => {
     $('#btnGuardar').on('click', function() {
-      const idTurno = $('#txtIdTurno').val();
+      const idCiudad = $('#txtIdCiudad').val();
       const nuevaDescripcion = $('#txtDescripcion').val();
       const tabla = $('#tbl').DataTable();
 
-      if(idTurno) {
+      if(idCiudad) {
         // update
-        fetch(`/api/v1/turnos/${idTurno}`, {
+        fetch(`/api/v1/ciudades/${idCiudad}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json'
@@ -115,17 +118,17 @@ Turnos
         .then(data => {
           if(data && !data.error && data.success) {
             tabla.ajax.reload();
-            Swal.fire("Actualizado", "El turno ha sido actualizado correctamente.", "success");
+            Swal.fire("Actualizado", "La ciudad ha sido actualizada correctamente.", "success");
           } else {
             Swal.fire(data.error);
           }
         }).catch(err => {
           console.error(err);
-          Swal.fire("Error", "Ocurrió un error al actualizar el turno.", "error");
+          Swal.fire("Error", "Ocurrió un error al actualizar la ciudad.", "error");
         });
       } else {
         // insert
-        fetch(`/api/v1/turnos`, {
+        fetch(`/api/v1/ciudades`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -135,13 +138,13 @@ Turnos
         .then(data => {
           if(data && !data.error && data.success) {
             tabla.ajax.reload();
-            Swal.fire("Agregado", "El turno ha sido agregado correctamente.", "success");
+            Swal.fire("Actualizado", "La ciudad ha sido agregada correctamente.", "success");
           } else {
             Swal.fire(data.error);
           }
         }).catch(err => {
           console.error(err);
-          Swal.fire("Error", "Ocurrió un error al guardar el turno.", "error");
+          Swal.fire("Error", "Ocurrió un error al guardar la ciudad.", "error");
         });
       }
       $('#txtDescripcion').val("");
@@ -151,6 +154,7 @@ Turnos
 
   const editar = () => {
     $('#tbl').on('click', 'button[name="btn_editar"]',function(){
+      // Mostrar mensaje de confirmación usando sweetalert
       Swal.fire({
         title: "¿Deseas editar este registro?",
         showCancelButton: true,
@@ -158,12 +162,14 @@ Turnos
         cancelButtonText: `No`
       }).then((result) => {
         if (result.isConfirmed) {
-          $('#modalTitle').text("Editar un Turno");
+          //Swal.fire("Saved!", "", "success");
+          $('#modalTitle').text("Editar una Ciudad");
 
-          const idTurno = $(this).data('id');
-          $('#txtIdTurno').val(idTurno);
+          const idCiudad = $(this).data('id');
+          $('#txtIdCiudad').val(idCiudad);
 
-          fetch(`/api/v1/turnos/${idTurno}`, {
+          // Necesitamos obtener la descripción del backend
+          fetch(`/api/v1/ciudades/${idCiudad}`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json'
@@ -181,7 +187,8 @@ Turnos
 
   const eliminar = () => {
     $('#tbl').on('click', 'button[name="btn_eliminar"]',function(){
-      const idTurno = $(this).data('id');
+      const idCiudad = $(this).data('id');
+      // Mostrar mensaje de confirmación usando sweetalert
       Swal.fire({
         title: "¿Deseas eliminar este registro?",
         showCancelButton: true,
@@ -189,7 +196,7 @@ Turnos
         cancelButtonText: `No`
       }).then((result) => {
         if (result.isConfirmed) {
-          fetch(`/api/v1/turnos/${idTurno}`, {
+          fetch(`/api/v1/ciudades/${idCiudad}`, {
             method: 'DELETE',
             headers: {
               'Content-Type': 'application/json'
@@ -198,6 +205,7 @@ Turnos
           .then(resp => resp.json())
           .then(data => {
             if(data && !data.error && data.success) {
+              // Para borrar la fila del datatable(cliente)
               const fila =$(this).closest('tr');
               const tabla = $('#tbl').DataTable();
               tabla.row(fila).remove().draw();
@@ -206,7 +214,7 @@ Turnos
               Swal.fire(data.error);
             }
           }).catch(err => {
-            Swal.fire("Error", "Ocurrió un error al eliminar el turno.", "error");
+            Swal.fire("Error", "Ocurrió un error al eliminar la ciudad.", "error");
           });
         }
       });
