@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
-    
+
 {% block titulo %}
-Ciudades
+Diagnósticos
 {% endblock %}
 
 {% block contenido %}
 <div class="container mt-4">
-    <h3>Listar Ciudades</h3>
+    <h3>Listar Diagnósticos</h3>
 
     <!-- tarjeta -->
     <div class="card">
@@ -22,7 +22,7 @@ Ciudades
             </tr>
           </thead>
           <tbody></tbody>
-      </table>
+        </table>
       </div>
     </div>
     <!-- /tarjeta -->
@@ -42,9 +42,9 @@ Ciudades
           <!-- Modal body -->
           <div class="modal-body">
             <div class="form-group">
-              <input type="hidden" id="txtIdCiudad">
+              <input type="hidden" id="txtIdDiagnostico">
               <label for="txtDescripcion">Descripción:</label>
-              <input type="text" class="form-control" placeholder="Ingrese alguna ciudad" id="txtDescripcion">
+              <input type="text" class="form-control" placeholder="Ingrese algún diagnóstico" id="txtDescripcion">
             </div>
           </div>
 
@@ -77,7 +77,7 @@ Ciudades
       language: {
         url: "{{ url_for('static', filename='vendor/datatables/es-ES.json') }}",
       },
-      ajax:'/api/v1/ciudades',
+      ajax:'/api/v1/diagnosticos',
       columns: [
         { data: 'descripcion' },
         { data: function(row) {
@@ -92,9 +92,9 @@ Ciudades
   const agregar = () => {
     $('#btnAgregar').on('click', function(){
       // Setear un título a modal
-      $('#modalTitle').text("Agregar una Ciudad");
+      $('#modalTitle').text("Agregar un Diagnóstico");
       // inicia ventana modal
-      $('#txtIdCiudad').val("");
+      $('#txtIdDiagnostico').val("");
       $('#txtDescripcion').val("");
       $('#modalFormulario').modal();
     });
@@ -102,13 +102,13 @@ Ciudades
 
   const guardar = () => {
     $('#btnGuardar').on('click', function() {
-      const idCiudad = $('#txtIdCiudad').val();
+      const idDiagnostico = $('#txtIdDiagnostico').val();
       const nuevaDescripcion = $('#txtDescripcion').val();
       const tabla = $('#tbl').DataTable();
 
-      if(idCiudad) {
+      if(idDiagnostico) {
         // update
-        fetch(`/api/v1/ciudades/${idCiudad}`, {
+        fetch(`/api/v1/diagnosticos/${idDiagnostico}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json'
@@ -118,17 +118,17 @@ Ciudades
         .then(data => {
           if(data && !data.error && data.success) {
             tabla.ajax.reload();
-            Swal.fire("Actualizado", "La ciudad ha sido actualizada correctamente.", "success");
+            Swal.fire("Actualizado", "El diagnóstico ha sido actualizado correctamente.", "success");
           } else {
             Swal.fire(data.error);
           }
         }).catch(err => {
           console.error(err);
-          Swal.fire("Error", "Ocurrió un error al actualizar la ciudad.", "error");
+          Swal.fire("Error", "Ocurrió un error al actualizar el diagnóstico.", "error");
         });
       } else {
         // insert
-        fetch(`/api/v1/ciudades`, {
+        fetch(`/api/v1/diagnosticos`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -138,13 +138,13 @@ Ciudades
         .then(data => {
           if(data && !data.error && data.success) {
             tabla.ajax.reload();
-            Swal.fire("Actualizado", "La ciudad ha sido agregada correctamente.", "success");
+            Swal.fire("Actualizado", "El diagnóstico ha sido agregado correctamente.", "success");
           } else {
             Swal.fire(data.error);
           }
         }).catch(err => {
           console.error(err);
-          Swal.fire("Error", "Ocurrió un error al guardar la ciudad.", "error");
+          Swal.fire("Error", "Ocurrió un error al guardar el diagnóstico.", "error");
         });
       }
       $('#txtDescripcion').val("");
@@ -162,14 +162,13 @@ Ciudades
         cancelButtonText: `No`
       }).then((result) => {
         if (result.isConfirmed) {
-          //Swal.fire("Saved!", "", "success");
-          $('#modalTitle').text("Editar una Ciudad");
+          $('#modalTitle').text("Editar un Diagnóstico");
 
-          const idCiudad = $(this).data('id');
-          $('#txtIdCiudad').val(idCiudad);
+          const idDiagnostico = $(this).data('id');
+          $('#txtIdDiagnostico').val(idDiagnostico);
 
           // Necesitamos obtener la descripción del backend
-          fetch(`/api/v1/ciudades/${idCiudad}`, {
+          fetch(`/api/v1/diagnosticos/${idDiagnostico}`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json'
@@ -187,7 +186,7 @@ Ciudades
 
   const eliminar = () => {
     $('#tbl').on('click', 'button[name="btn_eliminar"]',function(){
-      const idCiudad = $(this).data('id');
+      const idDiagnostico = $(this).data('id');
       // Mostrar mensaje de confirmación usando sweetalert
       Swal.fire({
         title: "¿Deseas eliminar este registro?",
@@ -196,7 +195,7 @@ Ciudades
         cancelButtonText: `No`
       }).then((result) => {
         if (result.isConfirmed) {
-          fetch(`/api/v1/ciudades/${idCiudad}`, {
+          fetch(`/api/v1/diagnosticos/${idDiagnostico}`, {
             method: 'DELETE',
             headers: {
               'Content-Type': 'application/json'
@@ -206,7 +205,7 @@ Ciudades
           .then(data => {
             if(data && !data.error && data.success) {
               // Para borrar la fila del datatable(cliente)
-              const fila =$(this).closest('tr');
+              const fila = $(this).closest('tr');
               const tabla = $('#tbl').DataTable();
               tabla.row(fila).remove().draw();
               Swal.fire("Eliminado", "", data.success);
@@ -214,7 +213,7 @@ Ciudades
               Swal.fire(data.error);
             }
           }).catch(err => {
-            Swal.fire("Error", "Ocurrió un error al eliminar la ciudad.", "error");
+            Swal.fire("Error", "Ocurrió un error al eliminar el diagnóstico.", "error");
           });
         }
       });

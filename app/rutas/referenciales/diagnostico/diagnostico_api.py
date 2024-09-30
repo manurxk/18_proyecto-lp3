@@ -1,60 +1,60 @@
 from flask import Blueprint, request, jsonify, current_app as app
-from app.dao.referenciales.ciudad.CiudadDao import CiudadDao
+from app.dao.referenciales.diagnostico.DiagnosticoDao import DiagnosticoDao
 
-ciuapi = Blueprint('ciuapi', __name__)
+diagapi = Blueprint('diagapi', __name__)
 
-# Trae todas las ciudades
-@ciuapi.route('/ciudades', methods=['GET'])
-def getCiudades():
-    ciudao = CiudadDao()
+# Trae todos los diagnósticos
+@diagapi.route('/diagnosticos', methods=['GET'])
+def getDiagnosticos():
+    diagdao = DiagnosticoDao()
 
     try:
-        ciudades = ciudao.getCiudades()
+        diagnosticos = diagdao.getDiagnosticos()
 
         return jsonify({
             'success': True,
-            'data': ciudades,
+            'data': diagnosticos,
             'error': None
         }), 200
 
     except Exception as e:
-        app.logger.error(f"Error al obtener todas las ciudades: {str(e)}")
+        app.logger.error(f"Error al obtener todos los diagnósticos: {str(e)}")
         return jsonify({
             'success': False,
             'error': 'Ocurrió un error interno. Consulte con el administrador.'
         }), 500
 
-@ciuapi.route('/ciudades/<int:ciudad_id>', methods=['GET'])
-def getCiudad(ciudad_id):
-    ciudao = CiudadDao()
+@diagapi.route('/diagnosticos/<int:diagnostico_id>', methods=['GET'])
+def getDiagnostico(diagnostico_id):
+    diagdao = DiagnosticoDao()
 
     try:
-        ciudad = ciudao.getCiudadById(ciudad_id)
+        diagnostico = diagdao.getDiagnosticoById(diagnostico_id)
 
-        if ciudad:
+        if diagnostico:
             return jsonify({
                 'success': True,
-                'data': ciudad,
+                'data': diagnostico,
                 'error': None
             }), 200
         else:
             return jsonify({
                 'success': False,
-                'error': 'No se encontró la ciudad con el ID proporcionado.'
+                'error': 'No se encontró el diagnóstico con el ID proporcionado.'
             }), 404
 
     except Exception as e:
-        app.logger.error(f"Error al obtener ciudad: {str(e)}")
+        app.logger.error(f"Error al obtener diagnóstico: {str(e)}")
         return jsonify({
             'success': False,
             'error': 'Ocurrió un error interno. Consulte con el administrador.'
         }), 500
 
-# Agrega una nueva ciudad
-@ciuapi.route('/ciudades', methods=['POST'])
-def addCiudad():
+# Agrega un nuevo diagnóstico
+@diagapi.route('/diagnosticos', methods=['POST'])
+def addDiagnostico():
     data = request.get_json()
-    ciudao = CiudadDao()
+    diagdao = DiagnosticoDao()
 
     # Validar que el JSON no esté vacío y tenga las propiedades necesarias
     campos_requeridos = ['descripcion']
@@ -63,32 +63,35 @@ def addCiudad():
     for campo in campos_requeridos:
         if campo not in data or data[campo] is None or len(data[campo].strip()) == 0:
             return jsonify({
-                            'success': False,
-                            'error': f'El campo {campo} es obligatorio y no puede estar vacío.'
-                            }), 400
+                'success': False,
+                'error': f'El campo {campo} es obligatorio y no puede estar vacío.'
+            }), 400
 
     try:
         descripcion = data['descripcion'].upper()
-        ciudad_id = ciudao.guardarCiudad(descripcion)
-        if ciudad_id is not None:
+        diagnostico_id = diagdao.guardarDiagnostico(descripcion)
+        if diagnostico_id is not None:
             return jsonify({
                 'success': True,
-                'data': {'id': ciudad_id, 'descripcion': descripcion},
+                'data': {'id': diagnostico_id, 'descripcion': descripcion},
                 'error': None
             }), 201
         else:
-            return jsonify({ 'success': False, 'error': 'No se pudo guardar la ciudad. Consulte con el administrador.' }), 500
+            return jsonify({
+                'success': False,
+                'error': 'No se pudo guardar el diagnóstico. Consulte con el administrador.'
+            }), 500
     except Exception as e:
-        app.logger.error(f"Error al agregar ciudad: {str(e)}")
+        app.logger.error(f"Error al agregar diagnóstico: {str(e)}")
         return jsonify({
             'success': False,
             'error': 'Ocurrió un error interno. Consulte con el administrador.'
         }), 500
 
-@ciuapi.route('/ciudades/<int:ciudad_id>', methods=['PUT'])
-def updateCiudad(ciudad_id):
+@diagapi.route('/diagnosticos/<int:diagnostico_id>', methods=['PUT'])
+def updateDiagnostico(diagnostico_id):
     data = request.get_json()
-    ciudao = CiudadDao()
+    diagdao = DiagnosticoDao()
 
     # Validar que el JSON no esté vacío y tenga las propiedades necesarias
     campos_requeridos = ['descripcion']
@@ -97,49 +100,49 @@ def updateCiudad(ciudad_id):
     for campo in campos_requeridos:
         if campo not in data or data[campo] is None or len(data[campo].strip()) == 0:
             return jsonify({
-                            'success': False,
-                            'error': f'El campo {campo} es obligatorio y no puede estar vacío.'
-                            }), 400
+                'success': False,
+                'error': f'El campo {campo} es obligatorio y no puede estar vacío.'
+            }), 400
     descripcion = data['descripcion']
     try:
-        if ciudao.updateCiudad(ciudad_id, descripcion.upper()):
+        if diagdao.updateDiagnostico(diagnostico_id, descripcion.upper()):
             return jsonify({
                 'success': True,
-                'data': {'id': ciudad_id, 'descripcion': descripcion},
+                'data': {'id': diagnostico_id, 'descripcion': descripcion},
                 'error': None
             }), 200
         else:
             return jsonify({
                 'success': False,
-                'error': 'No se encontró la ciudad con el ID proporcionado o no se pudo actualizar.'
+                'error': 'No se encontró el diagnóstico con el ID proporcionado o no se pudo actualizar.'
             }), 404
     except Exception as e:
-        app.logger.error(f"Error al actualizar ciudad: {str(e)}")
+        app.logger.error(f"Error al actualizar diagnóstico: {str(e)}")
         return jsonify({
             'success': False,
             'error': 'Ocurrió un error interno. Consulte con el administrador.'
         }), 500
 
-@ciuapi.route('/ciudades/<int:ciudad_id>', methods=['DELETE'])
-def deleteCiudad(ciudad_id):
-    ciudao = CiudadDao()
+@diagapi.route('/diagnosticos/<int:diagnostico_id>', methods=['DELETE'])
+def deleteDiagnostico(diagnostico_id):
+    diagdao = DiagnosticoDao()
 
     try:
-        # Usar el retorno de eliminarCiudad para determinar el éxito
-        if ciudao.deleteCiudad(ciudad_id):
+        # Usar el retorno de eliminarDiagnostico para determinar el éxito
+        if diagdao.deleteDiagnostico(diagnostico_id):
             return jsonify({
                 'success': True,
-                'mensaje': f'Ciudad con ID {ciudad_id} eliminada correctamente.',
+                'mensaje': f'Diagnóstico con ID {diagnostico_id} eliminado correctamente.',
                 'error': None
             }), 200
         else:
             return jsonify({
                 'success': False,
-                'error': 'No se encontró la ciudad con el ID proporcionado o no se pudo eliminar.'
+                'error': 'No se encontró el diagnóstico con el ID proporcionado o no se pudo eliminar.'
             }), 404
 
     except Exception as e:
-        app.logger.error(f"Error al eliminar ciudad: {str(e)}")
+        app.logger.error(f"Error al eliminar diagnóstico: {str(e)}")
         return jsonify({
             'success': False,
             'error': 'Ocurrió un error interno. Consulte con el administrador.'

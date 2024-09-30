@@ -15,6 +15,8 @@ from app.rutas.referenciales.especialidad.especialidad_routes import especimod  
 from app.rutas.referenciales.dia.dia_routes import diamod  #dia
 from app.rutas.referenciales.estado_cita.estado_cita_routes import estacitmod  #estado de la cita
 from app.rutas.referenciales.duracion_consulta.duracion_consulta_routes import duraconsumod  #duracion de la consulta
+from app.rutas.referenciales.diagnostico.diagnostico_routes import diagmod  # diagnostico
+
 
 # registrar referenciales
 modulo0 = '/referenciales'
@@ -30,6 +32,8 @@ app.register_blueprint(estacitmod, url_prefix=f'{modulo0}/estadocita')  #estado 
 app.register_blueprint(especimod, url_prefix=f'{modulo0}/especialidad') #especialidad
 app.register_blueprint(diamod, url_prefix=f'{modulo0}/dia') #dia
 app.register_blueprint(duraconsumod, url_prefix=f'{modulo0}/duracionconsulta') #duracion de la consulta
+app.register_blueprint(diagmod, url_prefix=f'{modulo0}/diagnostico')  # diagnostico
+
 
 
 
@@ -55,6 +59,8 @@ from app.rutas.referenciales.especialidad.especialidad_api import especiapi
 from app.rutas.referenciales.dia.dia_api import diaapi
 #duracion de la consulta
 from app.rutas.referenciales.duracion_consulta.duracion_consulta_api import duraconsuapi
+# diagnostico
+from app.rutas.referenciales.diagnostico.diagnostico_api import diagapi  
 
 # APIS v1
 #Ciudad
@@ -105,6 +111,9 @@ app.register_blueprint(diaapi, url_prefix=version1)
 version1 = '/api/v1'
 app.register_blueprint(duraconsuapi, url_prefix=version1)
 
+# Diagnóstico
+version1 = '/api/v1'
+app.register_blueprint(diagapi, url_prefix=version1)  # diagnóstico
 
 
 

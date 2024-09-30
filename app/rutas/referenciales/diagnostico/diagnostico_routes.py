@@ -1,9 +1,9 @@
 from flask import Blueprint, render_template, jsonify
-from app.dao.referenciales.ciudad.CiudadDao import CiudadDao
+from app.dao.referenciales.diagnostico.DiagnosticoDao import DiagnosticoDao
 
-ciumod = Blueprint('ciudad', __name__, template_folder='templates')
+diagmod = Blueprint('diagnostico', __name__, template_folder='templates')
 
-@ciumod.route('/ciudad-index')
-def ciudadIndex():
-    ciudao = CiudadDao()
-    return render_template('ciudad-index.html', lista_ciudades=ciudao.getCiudades())
+@diagmod.route('/diagnostico-index')
+def diagnosticoIndex():
+    diagdao = DiagnosticoDao()
+    return render_template('diagnostico-index.html', lista_diagnosticos=diagdao.getDiagnosticos())
