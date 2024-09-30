@@ -17,6 +17,9 @@ from app.rutas.referenciales.estado_cita.estado_cita_routes import estacitmod  #
 from app.rutas.referenciales.duracion_consulta.duracion_consulta_routes import duraconsumod  #duracion de la consulta
 from app.rutas.referenciales.diagnostico.diagnostico_routes import diagmod  # diagnostico
 from app.rutas.referenciales.turno.turno_routes import turmod # turno
+from app.rutas.referenciales.tratamiento.tratamiento_routes import traumod # tratamiento
+
+
 
 # registrar referenciales
 modulo0 = '/referenciales'
@@ -34,7 +37,7 @@ app.register_blueprint(diamod, url_prefix=f'{modulo0}/dia') #dia
 app.register_blueprint(duraconsumod, url_prefix=f'{modulo0}/duracionconsulta') #duracion de la consulta
 app.register_blueprint(diagmod, url_prefix=f'{modulo0}/diagnostico')  # diagnostico
 app.register_blueprint(turmod, url_prefix=f'{modulo0}/turno')  # turno
-
+app.register_blueprint(traumod, url_prefix=f'{modulo0}/tratamiento')  # tratamiento
 
 
 #ciudad
@@ -63,6 +66,8 @@ from app.rutas.referenciales.duracion_consulta.duracion_consulta_api import dura
 from app.rutas.referenciales.diagnostico.diagnostico_api import diagapi  
 # turno
 from app.rutas.referenciales.turno.turno_api import turnoapi 
+# tratamiento
+from app.rutas.referenciales.tratamiento.tratamiento_api import trauapi 
 
 
 # APIS v1
@@ -125,7 +130,9 @@ app.register_blueprint(turnoapi, url_prefix=version1)
 
 
 
-
+# Turno
+version1 = '/api/v1'
+app.register_blueprint(trauapi, url_prefix=version1) 
 
 
 
