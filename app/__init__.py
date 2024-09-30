@@ -175,3 +175,47 @@ def create_app():
     app.register_blueprint()
 
     return app
+
+
+
+
+
+
+
+
+
+
+
+
+# from flask import Flask, render_template, request, redirect, url_for, flash
+
+# app = Flask(__name__)
+# app.secret_key = 'mi_secreto'  # Necesario para mostrar mensajes flash
+
+# # Usuarios de ejemplo (puedes conectar a una base de datos)
+# users = {
+#     'admin': '6814403',
+#     'usuario': '6814403'
+# }
+
+# @app.route('/login', methods=['GET', 'POST'])
+# def login():
+#     error = None
+#     if request.method == 'POST':
+#         username = request.form['username']
+#         password = request.form['password']
+        
+#         # Validar credenciales
+#         if username in users and users[username] == password:
+#             return redirect(url_for('dashboard'))
+#         else:
+#             error = 'Credenciales inválidas. Intente de nuevo.'
+    
+#     return render_template('login.html', error=error)
+
+# @app.route('/dashboard')
+# def dashboard():
+#     return "¡Bienvenido al Dashboard!"
+
+# if __name__ == '__main__':
+#     app.run(debug=True)
