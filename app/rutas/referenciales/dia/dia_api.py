@@ -3,6 +3,20 @@ from app.dao.referenciales.dia.DiaDao import DiaDao
 
 diaapi = Blueprint('diaapi', __name__)
 
+# Lista de días válidos en español
+DIAS_VALIDOS = ['LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES', 'SÁBADO', 'DOMINGO']
+
+
+
+
+
+
+
+
+
+
+
+
 # Trae todos los dias
 @diaapi.route('/dias', methods=['GET'])
 def getDias():
@@ -50,7 +64,7 @@ def getDia(dia_id):
             'error': 'Ocurrió un error interno. Consulte con el administrador.'
         }), 500
 
-# Agrega un nuevo dia
+# Agrega un nuevo dia con validación
 @diaapi.route('/dias', methods=['POST'])
 def addDia():
     data = request.get_json()
@@ -69,6 +83,14 @@ def addDia():
 
     try:
         descripcion = data['descripcion'].upper()
+
+        # Validar si el día está en la lista de días válidos
+        if descripcion not in DIAS_VALIDOS:
+            return jsonify({
+                'success': False,
+                'error': 'Día inválido. Solo se permiten días de la semana válidos (Lunes a Domingo).'
+            }), 400
+
         dia_id = diadao.guardarDia(descripcion)
         if dia_id is not None:
             return jsonify({
@@ -85,6 +107,7 @@ def addDia():
             'error': 'Ocurrió un error interno. Consulte con el administrador.'
         }), 500
 
+# Actualizar un día con validación
 @diaapi.route('/dias/<int:dia_id>', methods=['PUT'])
 def updateDia(dia_id):
     data = request.get_json()
@@ -100,9 +123,18 @@ def updateDia(dia_id):
                             'success': False,
                             'error': f'El campo {campo} es obligatorio y no puede estar vacío.'
                             }), 400
-    descripcion = data['descripcion']
+
+    descripcion = data['descripcion'].upper()
+
+    # Validar si el día está en la lista de días válidos
+    if descripcion not in DIAS_VALIDOS:
+        return jsonify({
+            'success': False,
+            'error': 'Día inválido. Solo se permiten días de la semana válidos (Lunes a Domingo).'
+        }), 400
+
     try:
-        if diadao.updateDia(dia_id, descripcion.upper()):
+        if diadao.updateDia(dia_id, descripcion):
             return jsonify({
                 'success': True,
                 'data': {'id': dia_id, 'descripcion': descripcion},
@@ -120,12 +152,12 @@ def updateDia(dia_id):
             'error': 'Ocurrió un error interno. Consulte con el administrador.'
         }), 500
 
+# Eliminar un día
 @diaapi.route('/dias/<int:dia_id>', methods=['DELETE'])
 def deleteDia(dia_id):
     diadao = DiaDao()
 
     try:
-        # Usar el retorno de eliminarDia para determinar el éxito
         if diadao.deleteDia(dia_id):
             return jsonify({
                 'success': True,
