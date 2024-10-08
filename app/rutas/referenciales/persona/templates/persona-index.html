@@ -19,6 +19,8 @@ Personas
                         <th>ID</th>
                         <th>Nombre</th>
                         <th>Apellidos</th>
+                        <th>Cedula</th>
+                        <th>Fecha Nac.</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -42,8 +44,16 @@ Personas
                         <input type="text" class="form-control" placeholder="Ingrese su Nombre" id="txtNombre" required>
                     </div>
                     <div class="form-group">
-                        <label for="txtApellidos">Apellidos:</label>
-                        <input type="text" class="form-control" placeholder="Ingrese sus Apellidos" id="txtApellidos" required>
+                        <label for="txtApellido">Apellidos:</label>
+                        <input type="text" class="form-control" placeholder="Ingrese sus Apellido" id="txtApellido" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="txtCedula">Cedula:</label>
+                        <input type="text" class="form-control" placeholder="Ingrese su número de cédula" id="txtCedula" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="txtFechanac">Fecha de Nacimiento:</label>
+                        <input type="date" class="form-control" id="txtFechanac">
                     </div>
                 </div>
 
@@ -51,7 +61,6 @@ Personas
                     <button type="button" class="btn btn-outline-success" id="btnGuardar">Guardar</button>
                     <button type="button" class="btn btn-outline-warning" data-dismiss="modal">Cerrar</button>
                 </div>
-
             </div>
         </div>
     </div>
@@ -65,6 +74,23 @@ Personas
         </div>
     </div>
 </div>
+
+<!-- Librerías de jQuery y jQuery UI -->
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+<script>
+  $(function() {
+    $("#fecha_nacimiento").datepicker({
+      dateFormat: "yy-mm-dd",  // Formato de fecha (ejemplo: 2024-01-01)
+      changeMonth: true,       // Permite cambiar el mes
+      changeYear: true,        // Permite cambiar el año
+      yearRange: "1900:2024"   // Rango de años disponibles
+    });
+  });
+</script>
+
 {% endblock %}
 
 {% block js %}
@@ -78,7 +104,17 @@ Personas
       columns: [
         { data: 'id' },
         { data: 'nombre' },
-        { data: 'apellidos' },
+        { data: 'apellido' },
+        { data: 'cedula' },
+        { data: function(row) {
+            // Formatear la fecha en el formato deseado
+            const fecha = new Date(row.fechanac);
+            const dia = fecha.getDate().toString().padStart(2, '0');
+            const mes = (fecha.getMonth() + 1).toString().padStart(2, '0');  // +1 porque los meses comienzan en 0
+            const anio = fecha.getFullYear();
+            return `${dia}/${mes}/${anio}`;  // Formato DD/MM/YYYY
+          }
+        },
         { data: function(row) {
             return `
               <button type="button" name="btn_editar" class="btn btn-primary" data-id="${row.id}">Editar</button>
@@ -89,12 +125,15 @@ Personas
     });
   }
 
+
   const agregar = () => {
     $('#btnAgregar').on('click', function() {
       $('#modalTitle').text("Agregar una Persona");
       $('#txtIdPersona').val("");
       $('#txtNombre').val("");
-      $('#txtApellidos').val("");
+      $('#txtApellido').val("");
+      $('#txtCedula').val("");
+      $('#txtFechanac').val("");
       $('#modalFormulario').modal();
     });
   }
@@ -103,7 +142,9 @@ Personas
     $('#btnGuardar').on('click', function() {
       const idPersona = $('#txtIdPersona').val();
       const nombre = $('#txtNombre').val();
-      const apellidos = $('#txtApellidos').val();
+      const apellido = $('#txtApellido').val();
+      const cedula = $('#txtCedula').val();  // Captura el valor correctamente
+      const fechanac = $('#txtFechanac').val();  // Captura el valor correctamente
       const tabla = $('#tbl').DataTable();
 
       const method = idPersona ? 'PUT' : 'POST';
@@ -114,7 +155,7 @@ Personas
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ nombre, apellidos })
+        body: JSON.stringify({ nombre, apellido, cedula, fechanac })  // Envío correcto de datos
       })
       .then(resp => resp.json())
       .then(data => {
@@ -147,7 +188,9 @@ Personas
             $('#modalTitle').text("Editar Persona");
             $('#txtIdPersona').val(data.data.id);
             $('#txtNombre').val(data.data.nombre);
-            $('#txtApellidos').val(data.data.apellidos);
+            $('#txtApellido').val(data.data.apellido);
+            $('#txtCedula').val(data.data.cedula);  // Corregido
+            $('#txtFechanac').val(data.data.fechanac);  // Corregido
             $('#modalFormulario').modal();
           } else {
             Swal.fire("Error", data.error, "error");
@@ -196,7 +239,12 @@ Personas
     });
   }
 
-  $(function() {
+  // Validación del campo de cédula para que solo acepte números
+  $('#txtCedula').on('input', function() {
+    this.value = this.value.replace(/[^0-9]/g, '');  // Solo permite números
+  });
+
+  $(document).ready(function() {
     initDatatable();
     agregar();
     guardar();

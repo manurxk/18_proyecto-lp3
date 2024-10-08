@@ -56,7 +56,7 @@ def addPersona():
     data = request.get_json()
     personadao = PersonaDao()
 
-    campos_requeridos = ['nombre', 'apellidos']
+    campos_requeridos = ['nombre', 'apellido', 'cedula', 'fechanac'] 
 
     for campo in campos_requeridos:
         if campo not in data or not data[campo]:
@@ -67,12 +67,14 @@ def addPersona():
 
     try:
         nombre = data['nombre'].upper()
-        apellidos = data['apellidos'].upper()
-        persona_id = personadao.guardarPersona(nombre, apellidos)
+        apellido = data['apellido'].upper()
+        cedula = data['cedula']
+        fechanac = data['fechanac']
+        persona_id = personadao.guardarPersona(nombre, apellido, cedula, fechanac)
         if persona_id is not None:
             return jsonify({
                 'success': True,
-                'data': {'id': persona_id, 'nombre': nombre, 'apellidos': apellidos},
+                'data': {'id': persona_id, 'nombre': nombre, 'apellido': apellido, 'cedula': cedula, 'fechanac': fechanac},
                 'error': None
             }), 201
         else:
@@ -89,7 +91,7 @@ def updatePersona(persona_id):
     data = request.get_json()
     personadao = PersonaDao()
 
-    campos_requeridos = ['nombre', 'apellidos']
+    campos_requeridos = ['nombre', 'apellido', 'cedula', 'fechanac']
 
     for campo in campos_requeridos:
         if campo not in data or not data[campo]:
@@ -99,13 +101,15 @@ def updatePersona(persona_id):
             }), 400
 
     nombre = data['nombre']
-    apellidos = data['apellidos']
+    apellido = data['apellido']
+    cedula = data['cedula']
+    fechanac = data['fechanac']
 
     try:
-        if personadao.updatePersona(persona_id, nombre.upper(), apellidos.upper()):
+        if personadao.updatePersona(persona_id, nombre.upper(), apellido.upper(), cedula.upper(), fechanac.upper()):
             return jsonify({
                 'success': True,
-                'data': {'id': persona_id, 'nombre': nombre, 'apellidos': apellidos},
+                'data': {'id': persona_id, 'nombre': nombre, 'apellido': apellido, 'cedula': cedula, 'fechanac': fechanac},
                 'error': None
             }), 200
         else:
