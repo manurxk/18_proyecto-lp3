@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 
 {% block titulo %}
-Personas
+Citas
 {% endblock %}
 
 {% block contenido %}
 <div class="container mt-4">
-    <h3>Listar Personas</h3>
+    <h3>Listar Citas</h3>
 
     <div class="card">
         <div class="card-header">
@@ -17,10 +17,9 @@ Personas
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Nombre</th>
-                        <th>Apellidos</th>
-                        <th>Cedula</th>
-                        <th>Fecha Nac.</th>
+                        <th>Fecha y Hora</th>
+                        <th>Paciente</th>
+                        <th>Médico</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -39,21 +38,17 @@ Personas
 
                 <div class="modal-body">
                     <div class="form-group">
-                        <input type="hidden" id="txtIdPersona">
-                        <label for="txtNombre">Nombre:</label>
-                        <input type="text" class="form-control" placeholder="Ingrese su Nombre" id="txtNombre" required>
+                        <input type="hidden" id="txtIdCita">
+                        <label for="txtFechaHora">Fecha y Hora:</label>
+                        <input type="datetime-local" class="form-control" id="txtFechaHora" required>
                     </div>
                     <div class="form-group">
-                        <label for="txtApellido">Apellidos:</label>
-                        <input type="text" class="form-control" placeholder="Ingrese sus Apellido" id="txtApellido" required>
+                        <label for="txtPaciente">Paciente:</label>
+                        <input type="text" class="form-control" id="txtPaciente" required>
                     </div>
                     <div class="form-group">
-                        <label for="txtCedula">Cedula:</label>
-                        <input type="text" class="form-control" placeholder="Ingrese su número de cédula" id="txtCedula" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="txtFechanac">Fecha de Nacimiento:</label>
-                        <input type="date" class="form-control" id="txtFechanac">
+                        <label for="txtMedico">Médico:</label>
+                        <input type="text" class="form-control" id="txtMedico" required>
                     </div>
                 </div>
 
@@ -80,17 +75,6 @@ Personas
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 
-<script>
-  $(function() {
-    $("#fecha_nacimiento").datepicker({
-      dateFormat: "yy-mm-dd",  // Formato de fecha (ejemplo: 2024-01-01)
-      changeMonth: true,       // Permite cambiar el mes
-      changeYear: true,        // Permite cambiar el año
-      yearRange: "1900:2024"   // Rango de años disponibles
-    });
-  });
-</script>
-
 {% endblock %}
 
 {% block js %}
@@ -100,21 +84,12 @@ Personas
       language: {
         url: "{{ url_for('static', filename='vendor/datatables/es-ES.json') }}",
       },
-      ajax: '/api/v1/personas',
+      ajax: '/api/v1/citas',  // Asegúrate de que esta ruta sea correcta
       columns: [
         { data: 'id' },
-        { data: 'nombre' },
-        { data: 'apellido' },
-        { data: 'cedula' },
-        { data: function(row) {
-            // Formatear la fecha en el formato deseado
-            const fecha = new Date(row.fechanac);
-            const dia = fecha.getDate().toString().padStart(2, '0');
-            const mes = (fecha.getMonth() + 1).toString().padStart(2, '0');  // +1 porque los meses comienzan en 0
-            const anio = fecha.getFullYear();
-            return `${dia}/${mes}/${anio}`;  // Formato DD/MM/YYYY
-          }
-        },
+        { data: 'fecha_hora' },
+        { data: 'nombrepaciente' },  // Ajusta según tu estructura
+        { data: 'medico' },  // Ajusta según tu estructura
         { data: function(row) {
             return `
               <button type="button" name="btn_editar" class="btn btn-primary" data-id="${row.id}">Editar</button>
@@ -125,43 +100,44 @@ Personas
     });
   }
 
-
   const agregar = () => {
     $('#btnAgregar').on('click', function() {
-      $('#modalTitle').text("Agregar una Persona");
-      $('#txtIdPersona').val("");
-      $('#txtNombre').val("");
-      $('#txtApellido').val("");
-      $('#txtCedula').val("");
-      $('#txtFechanac').val("");
+      $('#modalTitle').text("Agregar una Cita");
+      $('#txtIdCita').val("");
+      $('#txtFechaHora').val("");
+      $('#txtPaciente').val(""); // Resetea el campo de Paciente
+      $('#txtMedico').val(""); // Resetea el campo de Médico
       $('#modalFormulario').modal();
     });
   }
 
   const guardar = () => {
     $('#btnGuardar').on('click', function() {
-      const idPersona = $('#txtIdPersona').val();
-      const nombre = $('#txtNombre').val();
-      const apellido = $('#txtApellido').val();
-      const cedula = $('#txtCedula').val();  // Captura el valor correctamente
-      const fechanac = $('#txtFechanac').val();  // Captura el valor correctamente
+      const idCita = $('#txtIdCita').val();
+      const fechaHora = $('#txtFechaHora').val();
+      const pacienteNombre = $('#txtPaciente').val(); // Obtener nombre del paciente
+      const medicoNombre = $('#txtMedico').val(); // Obtener nombre del médico
       const tabla = $('#tbl').DataTable();
 
-      const method = idPersona ? 'PUT' : 'POST';
-      const url = idPersona ? `/api/v1/personas/${idPersona}` : `/api/v1/personas`;
+      const method = idCita ? 'PUT' : 'POST';
+      const url = idCita ? `/api/v1/citas/${idCita}` : `/api/v1/citas`;
 
       fetch(url, {
         method: method,
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ nombre, apellido, cedula, fechanac })  // Envío correcto de datos
+        body: JSON.stringify({ 
+          fecha_hora: fechaHora, 
+          nombrepaciente: pacienteNombre, // Cambia paciente_id por nombrepaciente
+          medico: medicoNombre // Cambia medico_id por medico
+        })
       })
       .then(resp => resp.json())
       .then(data => {
         if (data && data.success) {
           tabla.ajax.reload();
-          Swal.fire("Éxito", idPersona ? "La persona ha sido actualizada correctamente." : "La persona ha sido agregada correctamente.", "success");
+          Swal.fire("Éxito", idCita ? "La cita ha sido actualizada correctamente." : "La cita ha sido agregada correctamente.", "success");
         } else {
           Swal.fire("Error", data.error || "Ocurrió un error al procesar la solicitud.", "error");
         }
@@ -181,16 +157,15 @@ Personas
       const id = $(this).data('id');
       const tabla = $('#tbl').DataTable();
 
-      fetch(`/api/v1/personas/${id}`)
+      fetch(`/api/v1/citas/${id}`)
         .then(resp => resp.json())
         .then(data => {
           if (data.success) {
-            $('#modalTitle').text("Editar Persona");
-            $('#txtIdPersona').val(data.data.id);
-            $('#txtNombre').val(data.data.nombre);
-            $('#txtApellido').val(data.data.apellido);
-            $('#txtCedula').val(data.data.cedula);  // Corregido
-            $('#txtFechanac').val(data.data.fechanac);  // Corregido
+            $('#modalTitle').text("Editar Cita");
+            $('#txtIdCita').val(data.data.id);
+            $('#txtFechaHora').val(data.data.fecha_hora);
+            $('#txtPaciente').val(data.data.nombrepaciente); // Ajusta según tu estructura
+            $('#txtMedico').val(data.data.medico); // Ajusta según tu estructura
             $('#modalFormulario').modal();
           } else {
             Swal.fire("Error", data.error, "error");
@@ -218,14 +193,14 @@ Personas
         confirmButtonText: 'Sí, eliminar'
       }).then((result) => {
         if (result.isConfirmed) {
-          fetch(`/api/v1/personas/${id}`, {
+          fetch(`/api/v1/citas/${id}`, {
             method: 'DELETE'
           })
           .then(resp => resp.json())
           .then(data => {
             if (data.success) {
               tabla.ajax.reload();
-              Swal.fire("Eliminado", "La persona ha sido eliminada correctamente.", "success");
+              Swal.fire("Eliminado", "La cita ha sido eliminada correctamente.", "success");
             } else {
               Swal.fire("Error", data.error || "Ocurrió un error al procesar la solicitud.", "error");
             }
@@ -238,11 +213,6 @@ Personas
       });
     });
   }
-
-  // Validación del campo de cédula para que solo acepte números
-  $('#txtCedula').on('input', function() {
-    this.value = this.value.replace(/[^0-9]/g, '');  // Solo permite números
-  });
 
   $(document).ready(function() {
     initDatatable();

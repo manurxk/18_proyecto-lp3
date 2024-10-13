@@ -2,12 +2,8 @@ from flask import Flask
 
 app = Flask(__name__)
 
-# Configuración de la clave secreta para sesiones
-app.secret_key = 'tu_clave_secreta_aqui'
 
 # importar referenciales
-from app.rutas.agendamientos.index.index_routes import indmod  # index
-
 from app.rutas.referenciales.ciudad.ciudad_routes import ciumod  # ciudad
 from app.rutas.referenciales.paises.pais_routes import paimod  # pais
 from app.rutas.referenciales.persona.persona_routes import permod
@@ -26,10 +22,8 @@ from app.rutas.referenciales.instrumento.instrumento_routes import instmod  # in
 
 # Importar rutas de usuario
 from app.rutas.agendamientos.usuario.usuario_routes import usuario_bp  # Rutas de usuario
-
-# registrar referenciales
-modulo1 = '/agendamientos'
-app.register_blueprint(indmod, url_prefix=f'{modulo1}/index')  # index
+from app.rutas.agendamientos.cita.cita_routes import citamod   # Cita
+from app.rutas.agendamientos.index.index_routes import indmod  # index
 
 # registrar referenciales
 modulo0 = '/referenciales'
@@ -48,6 +42,13 @@ app.register_blueprint(diagmod, url_prefix=f'{modulo0}/diagnostico')  # diagnost
 app.register_blueprint(turmod, url_prefix=f'{modulo0}/turno')  # turno
 app.register_blueprint(traumod, url_prefix=f'{modulo0}/tratamiento')  # tratamiento
 app.register_blueprint(instmod, url_prefix=f'{modulo0}/instrumento')  # instrumento
+
+# registrar agendamientos
+modulo1 = '/agendamientos'
+app.register_blueprint(indmod, url_prefix=f'{modulo1}/index')  # index
+app.register_blueprint(citamod, url_prefix=f'{modulo1}/cita')  # index
+
+
 
 #ciudad
 from app.rutas.referenciales.ciudad.ciudad_api import ciuapi
@@ -80,8 +81,15 @@ from app.rutas.referenciales.tratamiento.tratamiento_api import trauapi
 # instrumento
 from app.rutas.referenciales.instrumento.instrumento_api import instapi
 
-# Registrar las rutas de usuario
-app.register_blueprint(usuario_bp, url_prefix='/usuarios')
+# instrumento
+from app.rutas.agendamientos.cita.cita_api import citaapi
+
+
+
+
+
+
+
 
 # APIS v1
 #Ciudad
@@ -139,6 +147,36 @@ app.register_blueprint(turnoapi, url_prefix=version1)
 # Instrumento
 version1 = '/api/v1'
 app.register_blueprint(instapi, url_prefix=version1)
+
+# Tratamiento
+version1 = '/api/v1'
+app.register_blueprint(trauapi, url_prefix=version1)
+
+# Instrumento
+version1 = '/api/v1'
+app.register_blueprint(citaapi, url_prefix=version1)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -227,7 +265,11 @@ def create_app():
 
 
 
+# Configuración de la clave secreta para sesiones
+app.secret_key = 'tu_clave_secreta_aqui'
 
+# Registrar las rutas de usuario
+app.register_blueprint(usuario_bp, url_prefix='/usuarios')
 
 
 
