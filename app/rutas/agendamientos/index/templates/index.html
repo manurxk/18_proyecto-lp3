@@ -134,36 +134,94 @@ Inicio
 
 
 
-
-
-
-
-    
-   
-    <body>
-        <div class="button-container">
-            <a class="large-button" href="{{ url_for('persona.personaIndex') }}">Persona</a>
-            <a class="large-button" href="{{ url_for('ocupacion.ocupacionIndex') }}">Ocupación</a>
-            <a class="large-button" href="{{ url_for('estadocivil.estadocivilIndex') }}">Estado Civil</a>
-            <a class="large-button" href="{{ url_for('sexo.sexoIndex') }}">Sexo</a>
-            <a class="large-button" href="{{ url_for('ciudad.ciudadIndex') }}">Ciudad</a>
-            <a class="large-button" href="{{ url_for('pais.paisIndex') }}">País</a>
-            <a class="large-button" href="{{ url_for('nacionalidad.nacionalidadIndex') }}">Nacionalidad</a>
-            <a class="large-button" href="{{ url_for('estadocita.estadocitaIndex') }}">Estado de la Cita</a>
-            <a class="large-button" href="{{ url_for('especialidad.especialidadIndex') }}">Especialidad</a>
-            <a class="large-button" href="{{ url_for('dia.diaIndex') }}">Día</a>
-            <a class="large-button" href="{{ url_for('diagnostico.diagnosticoIndex') }}">Diagnóstico</a>
-            <a class="large-button" href="{{ url_for('duracionconsulta.duracionconsultaIndex') }}">Duración de consulta</a>
-            <a class="large-button" href="{{ url_for('turno.turnoIndex') }}">Turno</a>
-            <a class="large-button" href="{{ url_for('instrumento.instrumentoIndex') }}">Test Utilizados</a>
-            <a class="large-button" href="{{ url_for('tratamiento.tratamientoIndex') }}">Tratamientos</a>
-            
-            
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Panel de Resumen -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>Citas de Hoy</h5>
+                        <p>10 citas agendadas</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>Pacientes Registrados</h5>
+                        <p>300 pacientes</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>Médicos Disponibles</h5>
+                        <p>15 médicos</p>
+                    </div>
+                </div>
+            </div>
         </div>
-
     
-
-
+        <!-- Botones de Acción -->
+        <div class="row my-4">
+            <div class="col-md-4">
+                <a href="/nueva-cita" class="btn btn-success btn-block">Nueva Cita</a>
+            </div>
+            <div class="col-md-4">
+                <a href="/ver-citas" class="btn btn-primary btn-block">Ver Citas</a>
+            </div>
+            <div class="col-md-4">
+                <a href="/registrar-paciente" class="btn btn-warning btn-block">Registrar Paciente</a>
+            </div>
+        </div>
+    
+        <!-- Calendario -->
+        <div class="row">
+            <div class="col-md-12">
+                <div id="calendar"></div>
+            </div>
+        </div>
+    
+        <!-- Lista de Citas Agendadas -->
+        <div class="row my-4">
+            <div class="col-md-12">
+                <h3>Citas Agendadas</h3>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Paciente</th>
+                            <th>Médico</th>
+                            <th>Fecha</th>
+                            <th>Hora</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Juan Pérez</td>
+                            <td>Dra. Martínez</td>
+                            <td>09/10/2024</td>
+                            <td>10:00 AM</td>
+                            <td><a href="/editar-cita/1" class="btn btn-sm btn-primary">Editar</a></td>
+                        </tr>
+                        <!-- Más citas aquí -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <!-- FullCalendar.js Integration (en tu archivo JS) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#calendar').fullCalendar({
+                // Configuración del calendario
+                events: '/api/citas' // URL donde obtendrás las citas
+            });
+        });
+    </script>
 
     <br>
  <br>
