@@ -3,7 +3,8 @@ from flask import Flask
 app = Flask(__name__)
     
 # importar referenciales
-from app.rutas.referenciales.index.index_routes import indmod #index
+from app.rutas.agendamientos.index.index_routes import indmod #index
+
 from app.rutas.referenciales.ciudad.ciudad_routes import ciumod #ciudad
 from app.rutas.referenciales.paises.pais_routes import paimod #pais
 from app.rutas.referenciales.persona.persona_routes import permod
@@ -20,12 +21,13 @@ from app.rutas.referenciales.turno.turno_routes import turmod # turno
 from app.rutas.referenciales.tratamiento.tratamiento_routes import traumod # tratamiento
 from app.rutas.referenciales.instrumento.instrumento_routes import instmod  # instrumento
 
-
+# registrar referenciales
+modulo1 = '/agendamientos'
+app.register_blueprint(indmod, url_prefix=f'{modulo1}/index') #index
 
 
 # registrar referenciales
 modulo0 = '/referenciales'
-app.register_blueprint(indmod, url_prefix=f'{modulo0}/index') #index
 app.register_blueprint(ciumod, url_prefix=f'{modulo0}/ciudad') #ciudad
 app.register_blueprint(paimod, url_prefix=f'{modulo0}/paises') #paises
 app.register_blueprint(permod, url_prefix=f'{modulo0}/persona') #persona
@@ -133,16 +135,6 @@ app.register_blueprint(diagapi, url_prefix=version1)  # diagnóstico
 # Turno
 version1 = '/api/v1'
 app.register_blueprint(turnoapi, url_prefix=version1) 
-
-
-
-# Turno
-version1 = '/api/v1'
-app.register_blueprint(trauapi, url_prefix=version1) 
-
-
-
-
 
 
 # Instrumento
