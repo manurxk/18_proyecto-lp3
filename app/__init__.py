@@ -44,9 +44,9 @@ app.register_blueprint(traumod, url_prefix=f'{modulo0}/tratamiento')  # tratamie
 app.register_blueprint(instmod, url_prefix=f'{modulo0}/instrumento')  # instrumento
 
 # registrar agendamientos
-modulo1 = '/agendamientos'
-app.register_blueprint(indmod, url_prefix=f'{modulo1}/index')  # index
-app.register_blueprint(citamod, url_prefix=f'{modulo1}/cita')  # index
+modulo0 = '/agendamientos'
+app.register_blueprint(indmod, url_prefix=f'{modulo0}/index')  # index
+app.register_blueprint(citamod, url_prefix=f'{modulo0}/cita')  # cita
 
 
 
@@ -152,7 +152,9 @@ app.register_blueprint(instapi, url_prefix=version1)
 version1 = '/api/v1'
 app.register_blueprint(trauapi, url_prefix=version1)
 
-# Instrumento
+
+
+# Cita
 version1 = '/api/v1'
 app.register_blueprint(citaapi, url_prefix=version1)
 
@@ -194,7 +196,7 @@ def buscar():
 
     # Definir las rutas posibles
     rutas = {
-        'ciudad': 'ciudad.ciudadIndex',
+    'ciudad': 'ciudad.ciudadIndex',
     'ciudades': 'ciudad.ciudadIndex',  # Agregado
     'pais': 'pais.paisIndex',
     'paises': 'pais.paisIndex',  # Agregado

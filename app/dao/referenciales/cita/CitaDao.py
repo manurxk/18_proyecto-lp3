@@ -1,5 +1,6 @@
 from flask import current_app as app
 from app.conexion.Conexion import Conexion
+from datetime import datetime
 
 class CitaDao:
 
@@ -16,14 +17,14 @@ class CitaDao:
             cur.execute(citaSQL)
             citas = cur.fetchall()  # Trae datos de la bd
 
-            # Transformar los datos en una lista de diccionarios
+            # Transformar los datos en una lista de diccionarios y convertir fecha/hora a cadena
             return [{
                 'id': cita[0],
                 'nombrepaciente': cita[1],
                 'motivoconsulta': cita[2],
                 'medico': cita[3],
-                'fecha': cita[4],
-                'hora': cita[5]
+                'fecha': cita[4].strftime('%Y-%m-%d') if cita[4] else None,  # Convertir fecha a string
+                'hora': cita[5].strftime('%H:%M:%S') if cita[5] else None  # Convertir hora a string
             } for cita in citas]
 
         except Exception as e:
@@ -52,8 +53,8 @@ class CitaDao:
                     "nombrepaciente": citaEncontrada[1],
                     "motivoconsulta": citaEncontrada[2],
                     "medico": citaEncontrada[3],
-                    "fecha": citaEncontrada[4],
-                    "hora": citaEncontrada[5]
+                    "fecha": citaEncontrada[4].strftime('%Y-%m-%d') if citaEncontrada[4] else None,  # Convertir fecha
+                    "hora": citaEncontrada[5].strftime('%H:%M:%S') if citaEncontrada[5] else None  # Convertir hora
                 }  # Retornar los datos de la cita
             else:
                 return None  # Retornar None si no se encuentra la cita

@@ -17,9 +17,11 @@ Citas
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Fecha y Hora</th>
                         <th>Paciente</th>
+                        <th>Motivo de Consulta</th>
                         <th>Médico</th>
+                        <th>Fecha</th>
+                        <th>Hora</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -39,16 +41,24 @@ Citas
                 <div class="modal-body">
                     <div class="form-group">
                         <input type="hidden" id="txtIdCita">
-                        <label for="txtFechaHora">Fecha y Hora:</label>
-                        <input type="datetime-local" class="form-control" id="txtFechaHora" required>
-                    </div>
-                    <div class="form-group">
                         <label for="txtPaciente">Paciente:</label>
                         <input type="text" class="form-control" id="txtPaciente" required>
                     </div>
                     <div class="form-group">
+                        <label for="txtMotivoConsulta">Motivo de Consulta:</label>
+                        <input type="text" class="form-control" id="txtMotivoConsulta" required>
+                    </div>
+                    <div class="form-group">
                         <label for="txtMedico">Médico:</label>
                         <input type="text" class="form-control" id="txtMedico" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="txtFecha">Fecha:</label>
+                        <input type="date" class="form-control" id="txtFecha" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="txtHora">Hora:</label>
+                        <input type="time" class="form-control" id="txtHora" required>
                     </div>
                 </div>
 
@@ -84,12 +94,14 @@ Citas
       language: {
         url: "{{ url_for('static', filename='vendor/datatables/es-ES.json') }}",
       },
-      ajax: '/api/v1/citas',  // Asegúrate de que esta ruta sea correcta
+      ajax: '/api/v1/citas',
       columns: [
-        { data: 'id' },
-        { data: 'fecha_hora' },
-        { data: 'nombrepaciente' },  // Ajusta según tu estructura
-        { data: 'medico' },  // Ajusta según tu estructura
+        { data: 'id' },  // Asegúrate de que el ID esté en la respuesta de la API
+        { data: 'nombrepaciente' },
+        { data: 'motivoconsulta' },
+        { data: 'medico' },
+        { data: 'fecha' },
+        { data: 'hora' },
         { data: function(row) {
             return `
               <button type="button" name="btn_editar" class="btn btn-primary" data-id="${row.id}">Editar</button>
@@ -104,19 +116,30 @@ Citas
     $('#btnAgregar').on('click', function() {
       $('#modalTitle').text("Agregar una Cita");
       $('#txtIdCita').val("");
-      $('#txtFechaHora').val("");
-      $('#txtPaciente').val(""); // Resetea el campo de Paciente
-      $('#txtMedico').val(""); // Resetea el campo de Médico
+      $('#txtPaciente').val("");
+      $('#txtMotivoConsulta').val("");
+      $('#txtMedico').val("");
+      $('#txtFecha').val("");
+      $('#txtHora').val("");
       $('#modalFormulario').modal();
     });
   }
 
   const guardar = () => {
     $('#btnGuardar').on('click', function() {
+      const nombrepaciente = $('#txtPaciente').val(); 
+      const motivoconsulta = $('#txtMotivoConsulta').val();
+      const medico = $('#txtMedico').val();
+      const fecha = $('#txtFecha').val();
+      const hora = $('#txtHora').val();
+
+      // Validar que todos los campos sean obligatorios
+      if (!nombrepaciente || !motivoconsulta || !medico || !fecha || !hora) {
+        Swal.fire("Error", "Todos los campos son obligatorios.", "error");
+        return;
+      }
+
       const idCita = $('#txtIdCita').val();
-      const fechaHora = $('#txtFechaHora').val();
-      const pacienteNombre = $('#txtPaciente').val(); // Obtener nombre del paciente
-      const medicoNombre = $('#txtMedico').val(); // Obtener nombre del médico
       const tabla = $('#tbl').DataTable();
 
       const method = idCita ? 'PUT' : 'POST';
@@ -128,9 +151,11 @@ Citas
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({ 
-          fecha_hora: fechaHora, 
-          nombrepaciente: pacienteNombre, // Cambia paciente_id por nombrepaciente
-          medico: medicoNombre // Cambia medico_id por medico
+          nombrepaciente, 
+          motivoconsulta,
+          medico,
+          fecha, 
+          hora
         })
       })
       .then(resp => resp.json())
@@ -163,9 +188,11 @@ Citas
           if (data.success) {
             $('#modalTitle').text("Editar Cita");
             $('#txtIdCita').val(data.data.id);
-            $('#txtFechaHora').val(data.data.fecha_hora);
-            $('#txtPaciente').val(data.data.nombrepaciente); // Ajusta según tu estructura
-            $('#txtMedico').val(data.data.medico); // Ajusta según tu estructura
+            $('#txtPaciente').val(data.data.nombrepaciente); 
+            $('#txtMotivoConsulta').val(data.data.motivoconsulta);
+            $('#txtMedico').val(data.data.medico); 
+            $('#txtFecha').val(data.data.fecha);
+            $('#txtHora').val(data.data.hora);
             $('#modalFormulario').modal();
           } else {
             Swal.fire("Error", data.error, "error");
@@ -214,7 +241,7 @@ Citas
     });
   }
 
-  $(document).ready(function() {
+  $(document).ready(() => {
     initDatatable();
     agregar();
     guardar();
