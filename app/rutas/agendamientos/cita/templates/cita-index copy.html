@@ -112,7 +112,19 @@ Citas
   }
 </style>
 
-
+<div class="welcome-banner">
+  <div class="welcome-text">
+      <h1>Bienvenido</h1>
+      <p>¿Qué hacemos hoy?</p>
+      <form>
+          <label for="fecha">Fecha:</label>
+          <input type="date" id="fecha" name="fecha">
+      </form>
+  </div>
+  <div class="welcome-image">
+      <!-- Imagen decorativa -->
+  </div>
+</div>
 
 <div class="container-fluid">
   <div class="row">
@@ -120,8 +132,7 @@ Citas
           <div class="card">
               <div class="card-body">
                   <h5>Citas de Hoy</h5>
-                  
-                  <p></p>
+                  <p>10 citas agendadas</p>
               </div>
           </div>
       </div>
@@ -129,7 +140,7 @@ Citas
           <div class="card">
               <div class="card-body">
                   <h5>Pacientes Registrados</h5>
-                  <p></p>
+                  <p>300 pacientes</p>
               </div>
           </div>
       </div>
@@ -137,7 +148,7 @@ Citas
           <div class="card">
               <div class="card-body">
                   <h5>Médicos Disponibles</h5>
-                  <p></p>
+                  <p>15 médicos</p>
               </div>
           </div>
       </div>
@@ -145,7 +156,7 @@ Citas
 
   <div class="row my-4">
       <div class="col-md-4">
-          <a href="#" class="btn btn-outline-success btn-block" id="btnAgregar">Nueva Cita</a>
+          <a href="#" class="btn btn-outline-success" id="btnAgregar">Nueva Cita</a>
       </div>
       <div class="col-md-4">
           <a href="#" class="btn btn-primary btn-block">Ver Citas</a>
@@ -159,7 +170,9 @@ Citas
     <h3>Listar Citas</h3>
   
     <div class="card">
-     
+        <div class="card-header">
+            <button type="button" class="btn btn-outline-success" id="btnAgregar">Agregar</button>
+        </div>
         <div class="card-body">
             <table class="table table-striped" id="tbl">
                 <thead>
