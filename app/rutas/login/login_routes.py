@@ -8,8 +8,8 @@ app = Flask(__name__)
 app.secret_key = 'clave_secreta'
 
 # Usuario y contraseña predefinidos
-USUARIO_CORRECTO = "KEILA"
-CONTRASENA_CORRECTA = "12345678"
+USUARIO_CORRECTO = "6814403"
+CONTRASENA_CORRECTA = "1"
 
 @loginmod.route('/login', methods=['GET', 'POST'])
 def login():
