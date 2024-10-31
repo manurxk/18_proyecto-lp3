@@ -11,13 +11,13 @@ Tratamientos
     <!-- tarjeta -->
     <div class="card">
       <div class="card-header">
-        <button type="button" class="btn btn-outline-success" id="btnAgregar">Agregar</button>
+        <button type="button" class="btn btn-outline-info" id="btnAgregar">Agregar</button>
       </div>
       <div class="card-body">
         <table class="table table-striped" id="tbl">
           <thead>
             <tr>
-              <th>Descripción</th>
+              <th>Tratamientos</th>
               <th>Acciones</th>
             </tr>
           </thead>
@@ -43,15 +43,15 @@ Tratamientos
           <div class="modal-body">
             <div class="form-group">
               <input type="hidden" id="txtIdTratamiento">
-              <label for="txtDescripcion">Descripción:</label>
+              <label for="txtDescripcion">Tratamiento:</label>
               <input type="text" class="form-control" placeholder="Ingrese algún tratamiento" id="txtDescripcion">
             </div>
           </div>
 
           <!-- Modal footer -->
           <div class="modal-footer">
-            <button type="button" class="btn btn-outline-success" id="btnGuardar">Guardar</button>
-            <button type="button" class="btn btn-outline-warning" data-dismiss="modal">Cerrar</button>
+            <button type="button" class="btn btn-primary" id="btnGuardar">Guardar</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
           </div>
 
         </div>
@@ -81,8 +81,8 @@ Tratamientos
       columns: [
         { data: 'descripcion' },
         { data: function(row) {
-            return `<button type="button" name="btn_editar" class="btn btn-primary" data-id="${row.id}">Editar</button>
-                    <button type="button" name="btn_eliminar" class="btn btn-warning" data-id="${row.id}">Eliminar</button>`
+            return `<button type="button" name="btn_editar" class="btn btn-info" data-id="${row.id_tratamiento}">Editar</button>
+                    <button type="button" name="btn_eliminar" class="btn btn-warning" data-id="${row.id_tratamiento}">Eliminar</button>`
           }
         }
       ]

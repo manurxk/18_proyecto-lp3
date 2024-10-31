@@ -95,7 +95,7 @@ def updateCiudad(ciudad_id):
 
     # Verificar si faltan campos o son vacíos
     for campo in campos_requeridos:
-        if campo not in data or data[campo]:
+        if campo not in data or data[campo] is None or len(data[campo].strip()) == 0:
             return jsonify({
                             'success': False,
                             'error': f'El campo {campo} es obligatorio y no puede estar vacío.'

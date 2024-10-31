@@ -1,10 +1,10 @@
 from flask import Blueprint, request, jsonify, current_app as app
 from app.dao.referenciales.tratamiento.TratamientoDao import TratamientoDao
 
-trauapi = Blueprint('trauapi', __name__)
+tratapi = Blueprint('tratapi', __name__)
 
 # Trae todos los tratamientos
-@trauapi.route('/tratamientos', methods=['GET'])
+@tratapi.route('/tratamientos', methods=['GET'])
 def getTratamientos():
     tradao = TratamientoDao()
 
@@ -24,7 +24,7 @@ def getTratamientos():
             'error': 'Ocurrió un error interno. Consulte con el administrador.'
         }), 500
 
-@trauapi.route('/tratamientos/<int:tratamiento_id>', methods=['GET'])
+@tratapi.route('/tratamientos/<int:tratamiento_id>', methods=['GET'])
 def getTratamiento(tratamiento_id):
     tradao = TratamientoDao()
 
@@ -51,7 +51,7 @@ def getTratamiento(tratamiento_id):
         }), 500
 
 # Agrega un nuevo tratamiento
-@trauapi.route('/tratamientos', methods=['POST'])
+@tratapi.route('/tratamientos', methods=['POST'])
 def addTratamiento():
     data = request.get_json()
     tradao = TratamientoDao()
@@ -88,7 +88,7 @@ def addTratamiento():
             'error': 'Ocurrió un error interno. Consulte con el administrador.'
         }), 500
 
-@trauapi.route('/tratamientos/<int:tratamiento_id>', methods=['PUT'])
+@tratapi.route('/tratamientos/<int:tratamiento_id>', methods=['PUT'])
 def updateTratamiento(tratamiento_id):
     data = request.get_json()
     tradao = TratamientoDao()
@@ -123,7 +123,7 @@ def updateTratamiento(tratamiento_id):
             'error': 'Ocurrió un error interno. Consulte con el administrador.'
         }), 500
 
-@trauapi.route('/tratamientos/<int:tratamiento_id>', methods=['DELETE'])
+@tratapi.route('/tratamientos/<int:tratamiento_id>', methods=['DELETE'])
 def deleteTratamiento(tratamiento_id):
     tradao = TratamientoDao()
 

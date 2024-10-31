@@ -6,7 +6,7 @@ class TratamientoDao:
     def getTratamientos(self):
 
         tratamientoSQL = """
-        SELECT id, descripcion
+        SELECT id_tratamiento, descripcion
         FROM tratamientos
         """
         # objeto conexion
@@ -18,7 +18,7 @@ class TratamientoDao:
             tratamientos = cur.fetchall()  # trae datos de la bd
 
             # Transformar los datos en una lista de diccionarios
-            return [{'id': tratamiento[0], 'descripcion': tratamiento[1]} for tratamiento in tratamientos]
+            return [{'id_tratamiento': tratamiento[0], 'descripcion': tratamiento[1]} for tratamiento in tratamientos]
 
         except Exception as e:
             app.logger.error(f"Error al obtener todos los tratamientos: {str(e)}")
@@ -31,8 +31,8 @@ class TratamientoDao:
     def getTratamientoById(self, id):
 
         tratamientoSQL = """
-        SELECT id, descripcion
-        FROM tratamientos WHERE id=%s
+        SELECT id_tratamiento, descripcion
+        FROM tratamientos WHERE id_tratamiento=%s
         """
         # objeto conexion
         conexion = Conexion()
@@ -43,7 +43,7 @@ class TratamientoDao:
             tratamientoEncontrado = cur.fetchone()  # Obtener una sola fila
             if tratamientoEncontrado:
                 return {
-                    "id": tratamientoEncontrado[0],
+                    "id_tratamiento": tratamientoEncontrado[0],
                     "descripcion": tratamientoEncontrado[1]
                 }  # Retornar los datos del tratamiento
             else:
@@ -59,7 +59,7 @@ class TratamientoDao:
     def guardarTratamiento(self, descripcion):
 
         insertTratamientoSQL = """
-        INSERT INTO tratamientos(descripcion) VALUES(%s) RETURNING id
+        INSERT INTO tratamientos(descripcion) VALUES(%s) RETURNING id_tratamiento
         """
 
         conexion = Conexion()
@@ -89,7 +89,7 @@ class TratamientoDao:
         updateTratamientoSQL = """
         UPDATE tratamientos
         SET descripcion=%s
-        WHERE id=%s
+        WHERE id_tratamiento=%s
         """
 
         conexion = Conexion()
@@ -116,7 +116,7 @@ class TratamientoDao:
 
         deleteTratamientoSQL = """
         DELETE FROM tratamientos
-        WHERE id=%s
+        WHERE id_tratamiento=%s
         """
 
         conexion = Conexion()
