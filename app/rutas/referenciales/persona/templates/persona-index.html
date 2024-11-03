@@ -232,7 +232,12 @@ Persona
           .then(data => {
             $('#txtNombre').val(data.data.nombre);
             $('#txtApellido').val(data.data.apellido);
-            $('#txtFechaNacimiento').val(data.data.fechanacimiento);
+
+            // Convertimos la fecha al formato YYYY-MM-DD
+            const fechaNacimiento = new Date(data.data.fechanacimiento);
+            const fechaFormateada = fechaNacimiento.toISOString().split('T')[0];
+            $('#txtFechaNacimiento').val(fechaFormateada); // Cargar la fecha en el formato correcto
+
             $('#txtCedula').val(data.data.cedula);
             $('#txtSexo').val(data.data.sexo);
             $('#modalFormulario').modal();
@@ -241,6 +246,7 @@ Persona
       });
     });
   }
+
 
   const eliminar = () => {
     $('#tbl').on('click', 'button[name="btn_eliminar"]',function(){
