@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-    
+
 {% block titulo %}
 Ciudades
 {% endblock %}
@@ -11,7 +11,7 @@ Ciudades
     <!-- tarjeta -->
     <div class="card">
       <div class="card-header">
-        <button type="button" class="btn btn-outline-info" id="btnAgregar">Agregar</button>
+        <button type="button" class="btn btn-primary" id="btnAgregar">Agregar</button>
       </div>
       <div class="card-body">
         <table class="table table-striped" id="tbl">
@@ -25,40 +25,39 @@ Ciudades
       </table>
       </div>
     </div>
-    <!-- /tarjeta -->
+ <!-- /tarjeta -->
 
-    <!-- El formulario -->
-    <div class="modal" id="modalFormulario">
-      <!-- La clase modal-dialog-centered centra el modal -->
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
+ <!-- El formulario -->
+ <div class="modal" id="modalFormulario">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+    
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title" id="modalTitle"></h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
 
-          <!-- Modal Header -->
-          <div class="modal-header">
-            <h4 class="modal-title" id="modalTitle"></h4>
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-          </div>
-
-          <!-- Modal body -->
-          <div class="modal-body">
-            <div class="form-group">
-              <input type="hidden" id="txtIdCiudad">
-              <label for="txtDescripcion">Ciudad:</label>
-              <input type="text" class="form-control" placeholder="Ingrese alguna ciudad" id="txtDescripcion">
-            </div>
-          </div>
-
-          <!-- Modal footer -->
-          <div class="modal-footer">
-            <button type="button" class="btn btn-primary" id="btnGuardar">Guardar</button>
-            <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
-          </div>
-
+      <!-- Modal body -->
+      <div class="modal-body">
+        <div class="form-group">
+          <input type="hidden" id="txtId_ciudad">
+          <label for="txtDescripcion">Ciudad:</label>
+          <input type="text" class="form-control" placeholder="Ingrese la ciudad" id="txtDescripcion">
         </div>
       </div>
-    </div>
 
-    <div class="row mt-4 d-none" id="rowAlerta">
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id="btnGuardar">Guardar</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+      </div>
+
+    </div>
+   </div>
+ </div>
+    
+ <div class="row mt-4 d-none" id="rowAlerta">
         <div class="col col-md-12">
             <div class="alert alert-success">
                 <strong>Registro Exitoso!</strong>
@@ -70,19 +69,19 @@ Ciudades
 {% endblock %}
 
 {% block js %}
-<script>
+<script> 
 
   const initDatatable = () => {
     $('#tbl').DataTable({
       language: {
         url: "{{ url_for('static', filename='vendor/datatables/es-ES.json') }}",
       },
-      ajax:'/api/v1/ciudades',
+      ajax:'/api/v1/ciudades',      
       columns: [
         { data: 'descripcion' },
         { data: function(row) {
-            return `<button type="button" name="btn_editar" class="btn btn-info" data-id_ciudad="${row.id_ciudad}">Editar</button>
-                    <button type="button" name="btn_eliminar" class="btn btn-warning" data-id_ciudad="${row.id_ciudad}">Eliminar</button>`
+            return `<button type="button" name="btn_editar" class="btn btn-primary" data-id="${row.id_ciudad}">Editar</button>
+                    <button type="button" name="btn_eliminar" class="btn btn-danger" data-id="${row.id_ciudad}">Eliminar</button>`
           }
         }
       ]
@@ -91,10 +90,8 @@ Ciudades
 
   const agregar = () => {
     $('#btnAgregar').on('click', function(){
-      // Setear un título a modal
-      $('#modalTitle').text("Agregar una Ciudad");
-      // inicia ventana modal
-      $('#txtIdCiudad').val("");
+      $('#modalTitle').text("Ingrese la Ciudad");
+      $('#txtId_ciudad').val("");
       $('#txtDescripcion').val("");
       $('#modalFormulario').modal();
     });
@@ -102,13 +99,13 @@ Ciudades
 
   const guardar = () => {
     $('#btnGuardar').on('click', function() {
-      const id_ciudad = $('#txtIdCiudad').val();
+      const idCiudad = $('#txtId_ciudad').val();
       const nuevaDescripcion = $('#txtDescripcion').val();
       const tabla = $('#tbl').DataTable();
 
-      if(id_ciudad) {
+      if(idCiudad) {
         // update
-        fetch(`/api/v1/ciudades/${id_ciudad}`, {
+        fetch(`/api/v1/ciudades/${idCiudad}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json'
@@ -118,13 +115,13 @@ Ciudades
         .then(data => {
           if(data && !data.error && data.success) {
             tabla.ajax.reload();
-            Swal.fire("Actualizado", "La ciudad ha sido actualizada correctamente.", "success");
+            Swal.fire("Actualizado", "La Ciudad ha sido actualizada correctamente.", "success");
           } else {
             Swal.fire(data.error);
           }
         }).catch(err => {
           console.error(err);
-          Swal.fire("Error", "Ocurrió un error al actualizar la ciudad.", "error");
+          Swal.fire("Error", "Ocurrió un error al actualizar la Ciudad.", "error");
         });
       } else {
         // insert
@@ -138,13 +135,13 @@ Ciudades
         .then(data => {
           if(data && !data.error && data.success) {
             tabla.ajax.reload();
-            Swal.fire("Actualizado", "La ciudad ha sido agregada correctamente.", "success");
+            Swal.fire("Actualizado", "La Ciudad ha sido agregada correctamente.", "success");
           } else {
             Swal.fire(data.error);
           }
         }).catch(err => {
           console.error(err);
-          Swal.fire("Error", "Ocurrió un error al guardar la ciudad.", "error");
+          Swal.fire("Error", "Ocurrió un error al guardar la Ciudad.", "error");
         });
       }
       $('#txtDescripcion').val("");
@@ -153,49 +150,47 @@ Ciudades
   }
 
   const editar = () => {
-    $('#tbl').on('click', 'button[name="btn_editar"]', function() {
-        // Mostrar mensaje de confirmación usando sweetalert
-        Swal.fire({
-            title: "¿Deseas editar este registro?",
-            showCancelButton: true,
-            confirmButtonText: "Si",
-            cancelButtonText: `No`
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $('#modalTitle').text("Editar una Ciudad");
+    $('#tbl').on('click', 'button[name="btn_editar"]',function(){
+      Swal.fire({
+        title: "¿Deseas editar este registro?",
+        showCancelButton: true,
+        confirmButtonText: "Si",
+        cancelButtonText: "No"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $('#modalTitle').text("Editar una Ciudad");
 
-                const id_ciudad = $(this).data('id_ciudad');
-                $('#txtIdCiudad').val(id_ciudad);
+          const idCiudad = $(this).data('id');
+          $('#txtId_ciudad').val(idCiudad);
 
-                // Necesitamos obtener la descripción del backend
-                fetch(`/api/v1/ciudades/${id_ciudad}`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                })
-                .then(resp => resp.json())
-                .then(data => {
-                    $('#txtDescripcion').val(data.data.descripcion); // Asegúrate que aquí accedes a la propiedad correcta
-                    $('#modalFormulario').modal();
-                });
+          // Obtener la descripción del backend
+          fetch(`/api/v1/ciudades/${idCiudad}`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json'
             }
-        });
+          })
+          .then(resp => resp.json())
+          .then(data => {
+            $('#txtDescripcion').val(data.data.descripcion);
+            $('#modalFormulario').modal();
+          });
+        }
+      });
     });
-  };
+  }
 
   const eliminar = () => {
     $('#tbl').on('click', 'button[name="btn_eliminar"]',function(){
-      const id_ciudad = $(this).data('id_ciudad');
-      // Mostrar mensaje de confirmación usando sweetalert
+      const idCiudad = $(this).data('id');
       Swal.fire({
         title: "¿Deseas eliminar este registro?",
         showCancelButton: true,
         confirmButtonText: "Si",
-        cancelButtonText: `No`
+        cancelButtonText: "No"
       }).then((result) => {
         if (result.isConfirmed) {
-          fetch(`/api/v1/ciudades/${id_ciudad}`, {
+          fetch(`/api/v1/ciudades/${idCiudad}`, {
             method: 'DELETE',
             headers: {
               'Content-Type': 'application/json'
@@ -204,7 +199,6 @@ Ciudades
           .then(resp => resp.json())
           .then(data => {
             if(data && !data.error && data.success) {
-              // Para borrar la fila del datatable(cliente)
               const fila = $(this).closest('tr');
               const tabla = $('#tbl').DataTable();
               tabla.row(fila).remove().draw();
@@ -213,7 +207,7 @@ Ciudades
               Swal.fire(data.error);
             }
           }).catch(err => {
-            Swal.fire("Error", "Ocurrió un error al eliminar la ciudad.", "error");
+            Swal.fire("Error", "Ocurrió un error al eliminar la Ciudad.", "error");
           });
         }
       });
@@ -230,6 +224,6 @@ Ciudades
   $(function() {
     initDatatable();
     addEvents();
-  });
-</script>
+  }); 
+</script> 
 {% endblock %}

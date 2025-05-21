@@ -1,287 +1,173 @@
+from datetime import timedelta
 from flask import Flask
-from flask import render_template
-
-
 app = Flask(__name__)
 
+# inicializar el secret key
+app.secret_key = b'_5#y2L"F6Q7z\n\xec]/'
+
+# Establecer duración de la sesión, 15 minutos
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=15)
+
+# importar modulo de seguridad
+from app.rutas.login.login_routes import logmod
+app.register_blueprint(logmod)
+
+
 # importar referenciales
-from app.rutas.login.login_routes import loginmod
-from app.rutas.login.vista_routes import vistamod
-from app.rutas.referenciales.ciudad.ciudad_routes import ciumod #ciudad
-from app.rutas.referenciales.paises.pais_routes import paimod   #pais
-from app.rutas.referenciales.nacionalidad.nacionalidad_routes import naciomod  #nacionalidad
-from app.rutas.referenciales.ocupacion.ocupacion_routes import ocupmod  #ocupacion
-from app.rutas.referenciales.estado_civil.estado_civil_routes import estacivmod  #estado civil
-
-from app.rutas.referenciales.estado_cita.estado_cita_routes import estacitmod  #estado de la cita
-from app.rutas.referenciales.persona.persona_routes import persmod  #persona
-from app.rutas.referenciales.especialidad.especialidad_routes import especimod  #especialidad
-from app.rutas.referenciales.dia.dia_routes import diamod  #dia
-from app.rutas.referenciales.duracion_consulta.duracion_consulta_routes import duraconsumod  #duracion de la consulta
-from app.rutas.referenciales.instrumento.instrumento_routes import instmod  #instrumento utilizado
-from app.rutas.referenciales.turno.turno_routes import turmod  #turno
-from app.rutas.referenciales.tratamiento.tratamiento_routes import tratmod  #tratamiento
-from app.rutas.referenciales.diagnostico.diagnostico_routes import diagmod  #diagnostico
-
-# importar gestionar compras
-from app.rutas.gestionar_compras.registrar_pedido_compras.registrar_pedidos_compras_routes  import pdcmod
-
-# Importar rutas de usuario
-from app.rutas.agendamientos.cita.cita_routes import citamod   # Cita
-from app.rutas.agendamientos.index.index_routes import indmod  # index
-
+from app.rutas.referenciales.ciudad.ciudad_routes import ciumod 
+from app.rutas.referenciales.persona.persona_routes import persona_mod
+from app.rutas.referenciales.medico.medico_routes import medicomod
+from app.rutas.referenciales.paciente.paciente_routes import pacientemod
+from app.rutas.referenciales.ocupacion.ocupacion_routes import ocumod
+from app.rutas.referenciales.turno.turno_routes import turmod
+from app.rutas.referenciales.estado_civil.estado_civil_routes import estmod
+from app.rutas.referenciales.enfermedad.enfermedad_routes import enfmod
+from app.rutas.referenciales.genero.genero_routes import genmod
+from app.rutas.referenciales.dia.dia_routes import diamod
+from app.rutas.referenciales.hora.hora_routes import hormod
+from app.rutas.referenciales.especialidad.especialidad_routes import espmod
+from app.rutas.referenciales.estado_cita.estado_cita_routes import estdmod
+from app.rutas.referenciales.estado_laboral.estado_laboral_routes import estado_laboralmod
+from app.rutas.referenciales.ficha.ficha_routes import fichamod
+from app.rutas.referenciales.agenda_medica.agenda_medica_routes import agendamedmod
+from app.rutas.referenciales.sala_atencion.sala_atencion_routes import salmod
+from app.rutas.referenciales.usuario.usuario_routes import usumod
+from app.rutas.referenciales.cita.cita_routes import citamod
 
 # registrar referenciales
 modulo0 = '/referenciales'
-app.register_blueprint(loginmod, url_prefix=f'{modulo0}/login') 
-app.register_blueprint(vistamod, url_prefix=f'{modulo0}/login') 
-app.register_blueprint(ciumod, url_prefix=f'{modulo0}/ciudad') #ciudad
-app.register_blueprint(paimod, url_prefix=f'{modulo0}/paises') #pais
-app.register_blueprint(naciomod, url_prefix=f'{modulo0}/nacionalidad')  #nacionalidad
-app.register_blueprint(ocupmod, url_prefix=f'{modulo0}/ocupacion')  #ocupacion
-app.register_blueprint(estacivmod, url_prefix=f'{modulo0}/estadocivil')  #estado civil
+app.register_blueprint(citamod, url_prefix=f'{modulo0}/cita')
 
-app.register_blueprint(estacitmod, url_prefix=f'{modulo0}/estadocita')  #estado de la cita
-app.register_blueprint(persmod, url_prefix=f'{modulo0}/persona') #persona
-app.register_blueprint(especimod, url_prefix=f'{modulo0}/especialidad') #especialidad
-app.register_blueprint(diamod, url_prefix=f'{modulo0}/dia') #dia
-app.register_blueprint(duraconsumod, url_prefix=f'{modulo0}/duracionconsulta') #duracion de la consulta
-app.register_blueprint(instmod, url_prefix=f'{modulo0}/instrumento') #instrumento utilizado
-app.register_blueprint(turmod, url_prefix=f'{modulo0}/turno') #turno
-app.register_blueprint(tratmod, url_prefix=f'{modulo0}/tratamiento') #tratamiento
-app.register_blueprint(diagmod, url_prefix=f'{modulo0}/diagnostico') #diagnostico
+from app.rutas.referenciales.cita.cita_api import cita_api
 
-# registro de modulos - gestionar compras
-modulo1 = '/gestionar-compras'
-app.register_blueprint(pdcmod, url_prefix=f'{modulo1}/registrar-pedido-compras')
+modulo0 = '/referenciales'
+app.register_blueprint(ciumod, url_prefix=f'{modulo0}/ciudad')
 
-# registrar agendamientos
-modulo0 = '/agendamientos'
-app.register_blueprint(indmod, url_prefix=f'{modulo0}/index')  # index
-app.register_blueprint(citamod, url_prefix=f'{modulo0}/cita')  # cita
-
-
-
-
-#ciudad
 from app.rutas.referenciales.ciudad.ciudad_api import ciuapi
 
-#pais
-from app.rutas.referenciales.paises.pais_api import paisapi
+modulo0 = '/referenciales'
+app.register_blueprint(estado_laboralmod, url_prefix=f'{modulo0}/estado_laboral')
 
-#nacionalidad
-from app.rutas.referenciales.nacionalidad.nacionalidad_api import nacioapi
+from app.rutas.referenciales.estado_laboral.estado_laboral_api import estado_laboralapi
 
-#nacionalidad
-from app.rutas.referenciales.ocupacion.ocupacion_api import ocupapi
+modulo0 = '/referenciales'
+app.register_blueprint(persona_mod, url_prefix=f'{modulo0}/persona')
 
-#estado civil
-from app.rutas.referenciales.estado_civil.estado_civil_api import estacivapi
+from app.rutas.referenciales.persona.persona_api import personaapi
 
+modulo0 = '/referenciales'
+app.register_blueprint(medicomod, url_prefix=f'{modulo0}/medico')
 
+from app.rutas.referenciales.medico.medico_api import medicoapi
 
-#estado de la cita
-from app.rutas.referenciales.estado_cita.estado_cita_api import estacitapi
+modulo0 = '/referenciales'
+app.register_blueprint(pacientemod, url_prefix=f'{modulo0}/paciente')
 
-#persona
-from app.rutas.referenciales.persona.persona_api import persapi
+from app.rutas.referenciales.paciente.paciente_api import pacienteapi
 
-#especialidad
-from app.rutas.referenciales.especialidad.especialidad_api import especiapi
+modulo0 = '/referenciales'
+app.register_blueprint(ocumod, url_prefix=f'{modulo0}/ocupacion')
 
-#dia
+from app.rutas.referenciales.ocupacion.ocupacion_api import ocuapi
+
+modulo0 = '/referenciales'
+app.register_blueprint(turmod, url_prefix=f'{modulo0}/turno')
+
+from app.rutas.referenciales.turno.turno_api import turapi
+
+modulo0 = '/referenciales'
+app.register_blueprint(estmod, url_prefix=f'{modulo0}/estado_civil')
+
+from app.rutas.referenciales.estado_civil.estado_civil_api import estapi
+
+modulo0 = '/referenciales'
+app.register_blueprint(enfmod, url_prefix=f'{modulo0}/enfermedad')
+
+from app.rutas.referenciales.enfermedad.enfermedad_api import enfapi
+
+modulo0 = '/referenciales'
+app.register_blueprint(genmod, url_prefix=f'{modulo0}/genero')
+
+from app.rutas.referenciales.genero.genero_api import genapi
+
+modulo0 = '/referenciales'
+app.register_blueprint(diamod, url_prefix=f'{modulo0}/dia')
+
 from app.rutas.referenciales.dia.dia_api import diaapi
 
-#duracion de la consulta
-from app.rutas.referenciales.duracion_consulta.duracion_consulta_api import duraconsuapi
+modulo0 = '/referenciales'
+app.register_blueprint(hormod, url_prefix=f'{modulo0}/hora')
 
-#instrumento utilizado
-from app.rutas.referenciales.instrumento.instrumento_api import instapi
+from app.rutas.referenciales.hora.hora_api import horapi
 
-#turno
-from app.rutas.referenciales.turno.turno_api import turnoapi
+modulo0 = '/referenciales'
+app.register_blueprint(espmod, url_prefix=f'{modulo0}/especialidad')
 
-#tratamiento
-from app.rutas.referenciales.tratamiento.tratamiento_api import tratapi
+from app.rutas.referenciales.especialidad.especialidad_api import espapi
 
-#diagnostico
-from app.rutas.referenciales.diagnostico.diagnostico_api import diagapi
+modulo0 = '/referenciales'
+app.register_blueprint(estdmod, url_prefix=f'{modulo0}/estado_cita')
 
-#pedido de compra
-from app.rutas.gestionar_compras.registrar_pedido_compras.registrar_pedido_compras_api \
-    import pdcapi
-from app.rutas.referenciales.sucursal.sucursal_api import sucapi
+from app.rutas.referenciales.estado_cita.estado_cita_api import estadoapi
+
+modulo0 = '/referenciales'
+app.register_blueprint(fichamod, url_prefix=f'{modulo0}/ficha')
+
+from app.rutas.referenciales.ficha.ficha_api import fichaapi
+
+modulo0 = '/referenciales'
+app.register_blueprint(agendamedmod, url_prefix=f'{modulo0}/agenda_medica')
+
+from app.rutas.referenciales.agenda_medica.agenda_medica_api import agenda_medica_api
+
+modulo0 = '/referenciales'
+app.register_blueprint(salmod, url_prefix=f'{modulo0}/sala_atencion')
+
+from app.rutas.referenciales.sala_atencion.sala_atencion_api import salapi
+
+modulo0 = '/referenciales'
+app.register_blueprint(usumod, url_prefix=f'{modulo0}/usuaruio')
+
+from app.rutas.referenciales.usuario.usuario_api import usuarioapi
 
 # APIS v1
-#Ciudad
-apiversion1 = '/api/v1'
-app.register_blueprint(ciuapi, url_prefix=apiversion1)
+version1 = '/api/v1'
+app.register_blueprint(cita_api, url_prefix=version1)
 
-#Pais
-apiversion1 = '/api/v1'
-app.register_blueprint(paisapi, url_prefix=apiversion1)
+version1 = '/api/v1'
+app.register_blueprint(ciuapi, url_prefix=version1)
 
-#nacionalidad
-apiversion1 = '/api/v1'
-app.register_blueprint(nacioapi, url_prefix=apiversion1)
+version1 = '/api/v1'
+app.register_blueprint(estado_laboralapi, url_prefix=version1)
 
-#ocupacion
-apiversion1 = '/api/v1'
-app.register_blueprint(ocupapi, url_prefix=apiversion1)
+app.register_blueprint(personaapi, url_prefix=version1)
 
-#Estado civil
-apiversion1 = '/api/v1'
-app.register_blueprint(estacivapi, url_prefix=apiversion1)
+app.register_blueprint(medicoapi,url_prefix=version1)
 
+app.register_blueprint(pacienteapi, url_prefix=version1)
 
+app.register_blueprint(ocuapi, url_prefix=version1)
 
-#Estado de la cita
-apiversion1 = '/api/v1'
-app.register_blueprint(estacitapi, url_prefix=apiversion1)
+app.register_blueprint(turapi, url_prefix=version1)
 
-#persona
-apiversion1 = '/api/v1'
-app.register_blueprint(persapi, url_prefix=apiversion1)
+app.register_blueprint(estapi, url_prefix=version1)
 
-#especialidad
-apiversion1 = '/api/v1'
-app.register_blueprint(especiapi, url_prefix=apiversion1)
+app.register_blueprint(enfapi, url_prefix=version1)
 
-#dia
-apiversion1 = '/api/v1'
-app.register_blueprint(diaapi, url_prefix=apiversion1)
+app.register_blueprint(genapi, url_prefix=version1)
 
-#duracion de la consulta
-apiversion1 = '/api/v1'
-app.register_blueprint(duraconsuapi, url_prefix=apiversion1)
+app.register_blueprint(diaapi, url_prefix=version1)
 
-#instrumento utilizado
-apiversion1 = '/api/v1'
-app.register_blueprint(instapi, url_prefix=apiversion1)
+app.register_blueprint(horapi, url_prefix=version1)
 
-#turno
-apiversion1 = '/api/v1'
-app.register_blueprint(turnoapi, url_prefix=apiversion1)
+app.register_blueprint(espapi, url_prefix=version1)
 
-#tratamiento
-apiversion1 = '/api/v1'
-app.register_blueprint(tratapi, url_prefix=apiversion1)
+app.register_blueprint(estadoapi, url_prefix=version1)
 
-#diagnostico
-apiversion1 = '/api/v1'
-app.register_blueprint(diagapi, url_prefix=apiversion1)
+app.register_blueprint(fichaapi, url_prefix=version1)
 
+app.register_blueprint(agenda_medica_api, url_prefix=version1)
 
-# Gestionar compras API
-apiversion1 = '/api/v1'
-app.register_blueprint(pdcapi, url_prefix=f'{apiversion1}/{modulo1}/registrar-pedido-compras')
-app.register_blueprint(sucapi, url_prefix=apiversion1)
+app.register_blueprint(salapi, url_prefix=version1)
 
-
-
-
-@app.route('/login')
-def login():
-    return render_template('login-index.html')
-
-@app.route('/vista')
-def vista():
-    return render_template('vista-index.html')
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-from flask import render_template, request, redirect, url_for
-
-@app.route('/buscar', methods=['GET'])
-def buscar():
-    # Obtener el término de búsqueda del formulario
-    termino = request.args.get('termino').lower()
-
-    # Definir las rutas posibles
-    rutas = {
-    'ciudad': 'ciudad.ciudadIndex',
-    'ciudades': 'ciudad.ciudadIndex',  # Agregado
-    'pais': 'pais.paisIndex',
-    'paises': 'pais.paisIndex',  # Agregado
-    'nacionalidad': 'nacionalidad.nacionalidadIndex',
-    'nacionalidades': 'nacionalidad.nacionalidadIndex',  # Agregado
-    'ocupacion': 'ocupacion.ocupacionIndex',
-    'ocupaciones': 'ocupacion.ocupacionIndex',  # Agregado
-    'estado civil': 'estadocivil.estadocivilIndex',
-    'estados civiles': 'estadocivil.estadocivilIndex',  # Agregado
-    'sexo': 'sexo.sexoIndex',
-    'sexos': 'sexo.sexoIndex',  # Agregado
-    'persona': 'persona.personaIndex',
-    'personas': 'persona.personaIndex',  # Agregado
-    'cita': 'estadocita.estadocitaIndex',
-    'citas': 'estadocita.estadocitaIndex',  # Agregado
-    'especialidad': 'especialidad.especialidadIndex',
-    'especialidades': 'especialidad.especialidadIndex',  # Agregado
-    'dias': 'dia.diaIndex',
-    'dia': 'dia.diaIndex',  # Agregado
-    'diagnostico': 'diagnostico.diagnosticoIndex',
-    'diagnosticos': 'diagnostico.diagnosticoIndex',  # Agregado
-    'duracion consulta': 'duracionconsulta.duracionconsultaIndex',
-    'duraciones consulta': 'duracionconsulta.duracionconsultaIndex',  # Agregado
-    'turno': 'turno.turnoIndex',
-    'turnos': 'turno.turnoIndex',  # Agregado
-    'test utilizados': 'instrumento.instrumentoIndex',
-    'tests utilizados': 'instrumento.instrumentoIndex',  # Agregado
-    'tratamientos': 'tratamiento.tratamientoIndex',
-    'tratamiento': 'tratamiento.tratamientoIndex'  # Agregado
-    }
-
-    # Verificar si el término coincide con alguna clave en rutas
-    if termino in rutas:
-        # Redirigir a la página correspondiente
-        return redirect(url_for(rutas[termino]))
-    else:
-        # Renderizar una página con un mensaje de "no encontrado"
-        return render_template('no_encontrado.html', termino=termino)
-    
-from flask import render_template, request, redirect, url_for
-
-
-@app.route('/perfil')
-def perfil():
-    return render_template('perfil_usuario.html')
-
-
-@app.route('/registrar')
-def registrar():
-    return render_template('registro.html')
-
-      # Importar el blueprint de rutas principales
-
-def create_app():
-    app = Flask(__name__)
-    
-    # Registrar los Blueprints
-    app.register_blueprint()
-
-    return app
+app.register_blueprint(usuarioapi, url_prefix=version1)

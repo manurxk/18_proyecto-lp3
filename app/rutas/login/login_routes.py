@@ -1,38 +1,51 @@
+from flask import Blueprint, render_template, session, \
+    request, redirect, url_for, flash, current_app as app
+from werkzeug.security import check_password_hash
+from app.dao.login.login_dao import LoginDao
 
-from flask import Flask, render_template, request, redirect, url_for, flash
-from flask import Blueprint 
+logmod = Blueprint('login', __name__, template_folder='templates')
 
-loginmod = Blueprint('login', __name__, template_folder='templates')
-
-app = Flask(__name__)
-app.secret_key = 'clave_secreta'
-
-# Usuario y contraseña predefinidos
-USUARIO_CORRECTO = "6814403"
-CONTRASENA_CORRECTA = "1"
-
-@loginmod.route('/login', methods=['GET', 'POST'])
+@logmod.route('/', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-
-        # Validar usuario y contraseña
-        if username == USUARIO_CORRECTO and password == CONTRASENA_CORRECTA:
-            flash('Inicio de sesión exitoso.')
-            return redirect(url_for('vista.html'))
+        # lo que viene del formulario
+        usuario_nombre = request.form['usuario_nombre']
+        usuario_clave = request.form['usuario_clave']
+        # hacer la validación contra la bd
+        login_dao = LoginDao()
+        usuario_encontrado = login_dao.buscarUsuario(usuario_nombre)
+        if usuario_encontrado and 'usu_nombre' in usuario_encontrado:
+            password_hash_del_usuario = usuario_encontrado['usu_clave']
+            # if check_password_hash(
+            if usuario_clave == password_hash_del_usuario:
+                #pwhash=password_hash_del_usuario, password=usuario_clave):
+                # Crear la sesión
+                session.clear()  # Limpiar cualquier sesión previa
+                session.permanent = True
+                session['idusuario'] = usuario_encontrado['idusuario']
+                session['usu_nombre'] = usuario_encontrado['usu_nombre']
+                #session['per_nombre'] = usuario_encontrado['per_nombre']
+                #session['idrol'] = usuario_encontrado['idrol']
+                return redirect(url_for('login.inicio'))
+            else:
+                flash('Contraseña incorrecta.', 'warning')
         else:
-            flash('Usuario o contraseña incorrectos.')
-            return redirect(url_for('login'))
+            flash('Error de login, usuario no valido.', 'warning')
+        return redirect(url_for('login.login'))  
+    elif request.method == 'GET':
+        return render_template('login.html')
+    else:
+        return render_template('login.html')
 
-    return render_template('login-index.html')
+@logmod.route('/logout')
+def logout():
+    session.clear() # limpiar cualquier sesión previa
+    flash('Sesion cerrada', 'warning')
+    return redirect(url_for('login.login'))
 
-@loginmod.route('/vista')
-def vistaIndex():
-    return render_template('vista-index.html')
-
-# Registrar el Blueprint en la aplicación
-app.register_blueprint(loginmod)
-
-if __name__ == '__main__':
-    app.run(debug=True)
+@logmod.route('/inicio')
+def inicio():
+    if 'usu_nombre' in session:
+        return render_template('inicio.html')
+    else:
+        return redirect(url_for('login.login'))

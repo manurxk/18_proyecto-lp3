@@ -1,19 +1,15 @@
 from flask import Blueprint, request, jsonify, current_app as app
 from app.dao.referenciales.turno.TurnoDao import TurnoDao
 
-turnoapi = Blueprint('turnoapi', __name__)
+turapi = Blueprint('turapi', __name__)
 
-# Lista de turnos validos
-TURNOS_VALIDOS= ['MAÑANA', 'TARDE', 'NOCHE']
-
-
-# Trae todos los turnos
-@turnoapi.route('/turnos', methods=['GET'])
+# Obtener todos los turnos
+@turapi.route('/turnos', methods=['GET'])
 def getTurnos():
-    turnodao = TurnoDao()
+    turdao = TurnoDao()
 
     try:
-        turnos = turnodao.getTurnos()
+        turnos = turdao.getTurno()
 
         return jsonify({
             'success': True,
@@ -28,12 +24,13 @@ def getTurnos():
             'error': 'Ocurrió un error interno. Consulte con el administrador.'
         }), 500
 
-@turnoapi.route('/turnos/<int:turno_id>', methods=['GET'])
-def getTurno(turno_id):
-    turnodao = TurnoDao()
+# Obtener un turno por ID
+@turapi.route('/turnos/<int:id_turno>', methods=['GET'])
+def getTurno(id_turno):
+    turdao = TurnoDao()
 
     try:
-        turno = turnodao.getTurnoById(turno_id)
+        turno = turdao.getTurnoById(id_turno)
 
         if turno:
             return jsonify({
@@ -54,43 +51,33 @@ def getTurno(turno_id):
             'error': 'Ocurrió un error interno. Consulte con el administrador.'
         }), 500
 
-# Agrega un nuevo turno
-@turnoapi.route('/turnos', methods=['POST'])
+# Agregar un nuevo turno
+@turapi.route('/turnos', methods=['POST'])
 def addTurno():
     data = request.get_json()
-    turnodao = TurnoDao()
+    turdao = TurnoDao()
 
     # Validar que el JSON no esté vacío y tenga las propiedades necesarias
     campos_requeridos = ['descripcion']
 
-    # Verificar si faltan campos o son vacíos
     for campo in campos_requeridos:
-        if campo not in data or data[campo] is None or len(data[campo].strip()) == 0:
+        if campo not in data or not data[campo].strip():
             return jsonify({
-                            'success': False,
-                            'error': f'El campo {campo} es obligatorio y no puede estar vacío.'
-                            }), 400
+                'success': False,
+                'error': f'El campo {campo} es obligatorio y no puede estar vacío.'
+            }), 400
 
     try:
         descripcion = data['descripcion'].upper()
- 
-        # Validar si el TURNO está en la lista de TURNOS válidos
-        if descripcion not in TURNOS_VALIDOS:
-            return jsonify({
-                'success': False,
-                'error': 'Turno inválido. Solo se permiten Turnos de Mañana, Tarde y Noche.'
-            }), 400
-
-
-        turno_id = turnodao.guardarTurno(descripcion)
-        if turno_id is not None:
+        id_turno = turdao.guardarTurno(descripcion)
+        if id_turno is not None:
             return jsonify({
                 'success': True,
-                'data': {'id': turno_id, 'descripcion': descripcion},
+                'data': {'id_turno': id_turno, 'descripcion': descripcion},
                 'error': None
             }), 201
         else:
-            return jsonify({ 'success': False, 'error': 'No se pudo guardar el turno. Consulte con el administrador.' }), 500
+            return jsonify({'success': False, 'error': 'No se pudo guardar el turno. Consulte con el administrador.'}), 500
     except Exception as e:
         app.logger.error(f"Error al agregar turno: {str(e)}")
         return jsonify({
@@ -98,35 +85,28 @@ def addTurno():
             'error': 'Ocurrió un error interno. Consulte con el administrador.'
         }), 500
 
-@turnoapi.route('/turnos/<int:turno_id>', methods=['PUT'])
-def updateTurno(turno_id):
+# Actualizar un turno por ID
+@turapi.route('/turnos/<int:id_turno>', methods=['PUT'])
+def updateTurno(id_turno):
     data = request.get_json()
-    turnodao = TurnoDao()
+    turdao = TurnoDao()
 
     # Validar que el JSON no esté vacío y tenga las propiedades necesarias
     campos_requeridos = ['descripcion']
 
-    # Verificar si faltan campos o son vacíos
     for campo in campos_requeridos:
-        if campo not in data or data[campo] is None or len(data[campo].strip()) == 0:
-            return jsonify({
-                            'success': False,
-                            'error': f'El campo {campo} es obligatorio y no puede estar vacío.'
-                            }), 400
-    descripcion = data['descripcion']
-
-    # Validar si el TURNO está en la lista de TURNOS válidos
-    if descripcion not in TURNOS_VALIDOS:
+        if campo not in data or not data[campo].strip():
             return jsonify({
                 'success': False,
-                'error': 'Turno inválido. Solo se permiten Turnos de Mañana, Tarde y Noche.'
+                'error': f'El campo {campo} es obligatorio y no puede estar vacío.'
             }), 400
 
+    descripcion = data['descripcion']
     try:
-        if turnodao.updateTurno(turno_id, descripcion.upper()):
+        if turdao.updateTurno(id_turno, descripcion.upper()):
             return jsonify({
                 'success': True,
-                'data': {'id': turno_id, 'descripcion': descripcion},
+                'data': {'id_turno': id_turno, 'descripcion': descripcion},
                 'error': None
             }), 200
         else:
@@ -141,16 +121,16 @@ def updateTurno(turno_id):
             'error': 'Ocurrió un error interno. Consulte con el administrador.'
         }), 500
 
-@turnoapi.route('/turnos/<int:turno_id>', methods=['DELETE'])
-def deleteTurno(turno_id):
-    turnodao = TurnoDao()
+# Eliminar un turno por ID
+@turapi.route('/turnos/<int:id_turno>', methods=['DELETE'])
+def deleteTurno(id_turno):
+    turdao = TurnoDao()
 
     try:
-        # Usar el retorno de eliminarTurno para determinar el éxito
-        if turnodao.deleteTurno(turno_id):
+        if turdao.deleteTurno(id_turno):
             return jsonify({
                 'success': True,
-                'mensaje': f'Turno con ID {turno_id} eliminado correctamente.',
+                'mensaje': f'Turno con ID {id_turno} eliminado correctamente.',
                 'error': None
             }), 200
         else:
